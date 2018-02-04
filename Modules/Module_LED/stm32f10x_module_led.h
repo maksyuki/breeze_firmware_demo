@@ -28,26 +28,26 @@ myyerrol    2017.04.11    Format the module
 
 #include "stm32f10x.h"
 
-#define LED_A_ON     GPIO_SetBits(GPIOA, GPIO_Pin_11)
-#define LED_A_OFF    GPIO_ResetBits(GPIOA, GPIO_Pin_11)
+#define LED_A_ON     GPIO_ResetBits(GPIOA, GPIO_Pin_11)
+#define LED_A_OFF    GPIO_SetBits(GPIOA, GPIO_Pin_11)
 
-#define LED_B_ON     GPIO_SetBits(GPIOA, GPIO_Pin_8)
-#define LED_B_OFF    GPIO_ResetBits(GPIOA, GPIO_Pin_8)
+#define LED_B_ON     GPIO_ResetBits(GPIOA, GPIO_Pin_12)
+#define LED_B_OFF    GPIO_SetBits(GPIOA, GPIO_Pin_12)
 
-#define LED_C_ON     GPIO_SetBits(GPIOB, GPIO_Pin_1)
-#define LED_C_OFF    GPIO_ResetBits(GPIOB, GPIO_Pin_1)
+#define LED_C_ON     GPIO_ResetBits(GPIOA, GPIO_Pin_8)
+#define LED_C_OFF    GPIO_SetBits(GPIOA, GPIO_Pin_8)
 
-#define LED_D_ON     GPIO_SetBits(GPIOB, GPIO_Pin_3)
-#define LED_D_OFF    GPIO_ResetBits(GPIOB, GPIO_Pin_3)
+#define LED_D_ON     GPIO_ResetBits(GPIOA, GPIO_Pin_15)
+#define LED_D_OFF    GPIO_SetBits(GPIOA, GPIO_Pin_15)
 
 #define LED_A_TOGGLE GPIO_WriteBit(GPIOA, GPIO_Pin_11, \
                                   !GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_11))
-#define LED_B_TOGGLE GPIO_WriteBit(GPIOA, GPIO_Pin_8,  \
+#define LED_B_TOGGLE GPIO_WriteBit(GPIOA, GPIO_Pin_12, \
+                                  !GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_12))
+#define LED_C_TOGGLE GPIO_WriteBit(GPIOA, GPIO_Pin_8,  \
                                   !GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_8))
-#define LED_C_TOGGLE GPIO_WriteBit(GPIOB, GPIO_Pin_1,  \
-                                  !GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_1))
-#define LED_D_TOGGLE GPIO_WriteBit(GPIOB, GPIO_Pin_3,  \
-                                  !GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_3))
+#define LED_D_TOGGLE GPIO_WriteBit(GPIOA, GPIO_Pin_15, \
+                                  !GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_15))
 
 #define LED_A 0x01
 #define LED_B 0x02
