@@ -1,11 +1,11 @@
-PROJECT := breeze_firmware_none
+PROJECT := breeze_firmware_demo
 
 MCU     := cortex-m3
 
-DDEFS   += -DSTM32F10X_MD
+DDEFS   += -DSTM32F10X_LD
 DDEFS   += -DHSE_VALUE=8000000 -DUSE_STDPERIPH_DRIVER
 
-SRC_ASM := ../Libraries/CMSIS/startup/gcc/startup_stm32f10x_md.s
+SRC_ASM := ../Libraries/CMSIS/startup/gcc/startup_stm32f10x_ld.s
 
 DIR_DRIVERS += ../Drivers/Driver_Clock/
 DIR_DRIVERS += ../Drivers/Driver_Delay/
