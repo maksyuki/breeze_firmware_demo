@@ -2,7 +2,7 @@
 THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE IT AND/OR MODIFY IT
 UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
 
-Copyright (C), 2016-2016, Team MicroDynamics <microdynamics@126.com>
+Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
 
 Filename:    stm32f10x_system_led.c
 Author:      maksyuki
@@ -23,7 +23,7 @@ maksyuki    2016.12.20    Modify the
 myyerrol    2017.04.11    Format the module
 *******************************************************************************/
 
-// #include "stm32f10x_driver_delay.h"
+#include "stm32f10x_driver_delay.h"
 // #include "stm32f10x_module_battery.h"
 #include "stm32f10x_module_led.h"
 // #include "stm32f10x_algorithm_control.h"
@@ -169,40 +169,40 @@ void LED_Init(void)
 //     LED_UpdateLight();
 // }
 
-// void LED_SetInitialLight(void)
-// {
-//     u8 i;
-//
-//     for (i = 0; i < 4; i++)
-//     {
-//         LED_SetLight(ON, OFF, OFF, OFF);
-//         Delay_TimeMs(100);
-//         LED_SetLight(OFF, ON, OFF, OFF);
-//         Delay_TimeMs(100);
-//         LED_SetLight(OFF, OFF, ON, OFF);
-//         Delay_TimeMs(100);
-//         LED_SetLight(OFF, OFF, OFF, ON);
-//         Delay_TimeMs(100);
-//     }
-//
-//     for (i = 0; i < 4; i++)
-//     {
-//         LED_SetLight(ON, ON, ON, ON);
-//         Delay_TimeMs(100);
-//         LED_SetLight(OFF, OFF, OFF, OFF);
-//         Delay_TimeMs(100);
-//     }
-// }
-//
-// void LED_SetLight(LED_State led_a, LED_State led_b, LED_State led_c,
-//                   LED_State led_d)
-// {
-//     GPIO_WriteBit(GPIOA, GPIO_Pin_11, led_a);
-//     GPIO_WriteBit(GPIOA, GPIO_Pin_8,  led_b);
-//     GPIO_WriteBit(GPIOB, GPIO_Pin_1,  led_c);
-//     GPIO_WriteBit(GPIOB, GPIO_Pin_3,  led_d);
-// }
-//
+void LED_SetInitialLight(void)
+{
+    u8 i;
+
+    for (i = 0; i < 4; i++)
+    {
+        LED_SetLight(ON, OFF, OFF, OFF);
+        Delay_TimeMs(100);
+        LED_SetLight(OFF, ON, OFF, OFF);
+        Delay_TimeMs(100);
+        LED_SetLight(OFF, OFF, ON, OFF);
+        Delay_TimeMs(100);
+        LED_SetLight(OFF, OFF, OFF, ON);
+        Delay_TimeMs(100);
+    }
+
+    for (i = 0; i < 4; i++)
+    {
+        LED_SetLight(ON, ON, ON, ON);
+        Delay_TimeMs(100);
+        LED_SetLight(OFF, OFF, OFF, OFF);
+        Delay_TimeMs(100);
+    }
+}
+
+void LED_SetLight(LED_State led_a, LED_State led_b, LED_State led_c,
+                  LED_State led_d)
+{
+    GPIO_WriteBit(GPIOA, GPIO_Pin_11, led_a);
+    GPIO_WriteBit(GPIOA, GPIO_Pin_12, led_b);
+    GPIO_WriteBit(GPIOA, GPIO_Pin_8,  led_c);
+    GPIO_WriteBit(GPIOA, GPIO_Pin_15, led_d);
+}
+
 // void LED_UpdateLight(void)
 // {
 //     if (LED_BufferStructure.bits.a)
