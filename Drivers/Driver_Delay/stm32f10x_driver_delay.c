@@ -66,3 +66,53 @@ u32 Delay_GetRuntimeMs(void)
 {
     return it_systick_uptime;
 }
+
+
+
+
+
+
+/* Don't use this functions */
+static u8 g_fac_us = 0;
+static u16 g_fac_ms = 0;
+
+void delay_init(void)
+{
+	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);  /* Select external clock HCLK/8 */
+	g_fac_us = SystemCoreClock / 8000000;                  /* Clock time's 1/8 */
+	g_fac_ms = (u16)g_fac_us * 1000;
+}
+
+void delay_us(u32 nus)
+{
+	u32 temp;
+	SysTick->LOAD = nus * g_fac_us;
+	SysTick->VAL  = 0x00;                        /* Clear timer */
+	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;    /* Start countdown */
+
+	do
+	{
+       temp = SysTick->CTRL;
+	}
+	while ((temp & 0x01) && !(temp & (1<<16)));  /* Wait time to arrive */
+
+	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;   /* Disable timer */
+	SysTick->VAL  = 0x00;                        /* Clear timer */
+}
+
+void delay_ms(u16 nms)
+{
+	u32 temp;
+	SysTick->LOAD = (u32)nms * g_fac_ms;         /* Load time, SysTick->LOAD is 24bit */
+	SysTick->VAL  = 0x00;                        /* Clear timer */
+	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;    /* Start countdown */
+
+	do
+	{
+		temp = SysTick->CTRL;
+	}
+	while ((temp & 0x01) && !(temp & (1<<16)));  /* Wait time to arrive */
+
+	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;   /* Disable timer */
+	SysTick->VAL  = 0x00;                        /* Clear timer */
+}

@@ -33,4 +33,12 @@ extern void Delay_TimeUs(u32 n_us);
 extern u32  Delay_GetRuntimeMs(void);
 extern u32  Delay_GetRuntimeUs(void);
 
+
+
+
+
+/* Don't use this functions */
+extern void delay_init(void);  /* Initializes the delay function */
+extern void delay_us(u32 nus); /* Set time with microsecond precision */
+extern void delay_ms(u16 nms); /* Set time with millisecond precision */
 #endif
