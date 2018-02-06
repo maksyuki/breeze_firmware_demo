@@ -176,21 +176,27 @@ void LED_SetInitialLight(void)
     for (i = 0; i < 4; i++)
     {
         LED_SetLight(ON, OFF, OFF, OFF);
-        Delay_TimeMs(100);
+        delay_ms(100);
+        // Delay_TimeMs(100);
         LED_SetLight(OFF, ON, OFF, OFF);
-        Delay_TimeMs(100);
-        LED_SetLight(OFF, OFF, ON, OFF);
-        Delay_TimeMs(100);
+        delay_ms(100);
+        // Delay_TimeMs(100);
         LED_SetLight(OFF, OFF, OFF, ON);
-        Delay_TimeMs(100);
+        delay_ms(100);
+        // Delay_TimeMs(100);
+        LED_SetLight(OFF, OFF, ON, OFF);
+        delay_ms(100);
+        // Delay_TimeMs(100);
     }
 
     for (i = 0; i < 4; i++)
     {
         LED_SetLight(ON, ON, ON, ON);
-        Delay_TimeMs(100);
+        delay_ms(100);
+        // Delay_TimeMs(100);
         LED_SetLight(OFF, OFF, OFF, OFF);
-        Delay_TimeMs(100);
+        delay_ms(100);
+        // Delay_TimeMs(100);
     }
 }
 
