@@ -2,7 +2,7 @@
 THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE IT AND/OR MODIFY IT
 UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
 
-Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
+Copyright (C), 2016-2016, Team MicroDynamics <microdynamics@126.com>
 
 Filename:    stm32f10x_driver_clock.c
 Author:      myyerrol
@@ -43,8 +43,8 @@ void Clock_DeInit(void)
     RCC->CFGR    &= 0xF8FF0000;
     // Reset HSEON, CSSON, PLLON.
     RCC->CR      &= 0xFEF6FFFF;
-    RCC->CR      &= 0xFFFBFFFF;
     // Reset HSEBYP.
+    RCC->CR      &= 0xFFFBFFFF;
     // Reset PLLSRC, PLLXTPRE, PLLMUL[3:0] and USBPRE.
     RCC->CFGR    &= 0xFF80FFFF;
     // Disable all the peripheral.
@@ -53,7 +53,10 @@ void Clock_DeInit(void)
 
 void Clock_Init(void)
 {
-    Clock_InitSystemClockHSE(4);
+    Clock_InitSystemClockHSE(9);
+    // SysTick open system tick timer and initialize its interrupt.
+    // Interrupt overflow time is 1ms
+    SysTick_Config(SystemCoreClock / 1000);
 }
 
 // Use the internal HSI clock two divider (4MHz) as the PLL input.
@@ -84,8 +87,8 @@ s8 Clock_InitSystemClockHSI(u8 pll_multi)
     return clock_system;
 }
 
-// Use the external HSE clock 16M as the PLL input.
-// 1 <= pll_multi(PLL multiplier coefficient) <= 4.
+// Use the external HSE clock 8M as the PLL input.
+// 2 <= pll_multi(PLL multiplier coefficient) <= 9.
 s8 Clock_InitSystemClockHSE(u8 pll_multi)
 {
     u8 temp = 0;
@@ -99,7 +102,7 @@ s8 Clock_InitSystemClockHSE(u8 pll_multi)
     // APB1=DIV2; APB2=DIV1; AHB=DIV1;
     RCC->CFGR   = 0X00000400;
     // Offset two units.
-    pll_multi  = pll_multi * 2 - 2;
+    pll_multi  -= 2;
     // Set PLL 2~16.
     RCC->CFGR  |= pll_multi << 18;
     // PLLSRC ON.

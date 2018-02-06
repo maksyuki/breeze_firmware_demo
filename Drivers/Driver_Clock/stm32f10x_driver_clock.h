@@ -2,7 +2,7 @@
 THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE IT AND/OR MODIFY IT
 UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
 
-Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
+Copyright (C), 2016-2016, Team MicroDynamics <microdynamics@126.com>
 
 Filename:    stm32f10x_driver_clock.h
 Author:      myyerrol
