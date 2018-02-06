@@ -25,7 +25,7 @@ myyerrol    2017.04.13    Format the module
 #include "stm32f10x_driver_delay.h"
 #include "stm32f10x_it.h"
 
-// Cycles per microsecond.
+// Cycles per millisecond.
 static vu32 tick_us = 0;
 
 void Delay_Init(void)
@@ -33,8 +33,6 @@ void Delay_Init(void)
     RCC_ClocksTypeDef RCC_ClocksStructure;
     RCC_GetClocksFreq(&RCC_ClocksStructure);
     tick_us = RCC_ClocksStructure.SYSCLK_Frequency / 1000000;
-    // dedug
-    // tick_us = 264;
 }
 
 void Delay_TimeUs(u32 n_us)
