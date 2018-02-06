@@ -54,9 +54,6 @@ void Clock_DeInit(void)
 void Clock_Init(void)
 {
     Clock_InitSystemClockHSE(9);
-    // SysTick open system tick timer and initialize its interrupt.
-    // Interrupt overflow time is 1ms
-    SysTick_Config(SystemCoreClock / 1000);
 }
 
 // Use the internal HSI clock two divider (4MHz) as the PLL input.
@@ -105,6 +102,8 @@ s8 Clock_InitSystemClockHSE(u8 pll_multi)
     pll_multi  -= 2;
     // Set PLL 2~16.
     RCC->CFGR  |= pll_multi << 18;
+    // PLLXTPRE.
+    // RCC->CFGR  |= 1 << 17;
     // PLLSRC ON.
     RCC->CFGR  |= 1 << 16;
     // FLASH 2 delay period.
