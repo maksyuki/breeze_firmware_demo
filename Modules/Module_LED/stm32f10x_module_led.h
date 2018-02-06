@@ -64,8 +64,8 @@ myyerrol    2017.04.11    Format the module
 
 typedef enum
 {
-    OFF = 1,
-    ON  = 0 
+    ON  = 0,
+    OFF = 1
 } LED_State;
 
 typedef union
