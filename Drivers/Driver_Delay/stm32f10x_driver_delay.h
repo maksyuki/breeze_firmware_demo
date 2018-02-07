@@ -30,15 +30,8 @@ myyerrol    2017.04.13    Format the module
 extern void Delay_Init(void);
 extern void Delay_TimeMs(u16 n_ms);
 extern void Delay_TimeUs(u32 n_us);
+#ifdef SYSTEM_INTERRUPT_VERSION
 extern u32  Delay_GetRuntimeMs(void);
 extern u32  Delay_GetRuntimeUs(void);
-
-
-
-
-
-/* Don't use this functions */
-extern void delay_init(void);  /* Initializes the delay function */
-extern void delay_us(u32 nus); /* Set time with microsecond precision */
-extern void delay_ms(u16 nms); /* Set time with millisecond precision */
+#endif
 #endif

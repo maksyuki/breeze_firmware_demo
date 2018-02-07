@@ -25,6 +25,7 @@ myyerrol    2017.04.13    Format the module
 #include "stm32f10x_driver_delay.h"
 #include "stm32f10x_it.h"
 
+#ifdef SYSTEM_INTERRUPT_VERSION
 // Cycles per millisecond.
 static vu32 tick_us = 0;
 
@@ -67,26 +68,21 @@ u32 Delay_GetRuntimeMs(void)
     return it_systick_uptime;
 }
 
-
-
-
-
-
-/* Don't use this functions */
+#else
 static u8 g_fac_us = 0;
 static u16 g_fac_ms = 0;
 
-void delay_init(void)
+void Delay_Init(void)
 {
 	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);  /* Select external clock HCLK/8 */
 	g_fac_us = SystemCoreClock / 8000000;                  /* Clock time's 1/8 */
 	g_fac_ms = (u16)g_fac_us * 1000;
 }
 
-void delay_us(u32 nus)
+void Delay_TimeUs(u32 n_us)
 {
 	u32 temp;
-	SysTick->LOAD = nus * g_fac_us;
+	SysTick->LOAD = n_us * g_fac_us;
 	SysTick->VAL  = 0x00;                        /* Clear timer */
 	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;    /* Start countdown */
 
@@ -100,10 +96,10 @@ void delay_us(u32 nus)
 	SysTick->VAL  = 0x00;                        /* Clear timer */
 }
 
-void delay_ms(u16 nms)
+void Delay_TimeMs(u16 n_ms)
 {
 	u32 temp;
-	SysTick->LOAD = (u32)nms * g_fac_ms;         /* Load time, SysTick->LOAD is 24bit */
+	SysTick->LOAD = (u32)n_ms * g_fac_ms;         /* Load time, SysTick->LOAD is 24bit */
 	SysTick->VAL  = 0x00;                        /* Clear timer */
 	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;    /* Start countdown */
 
@@ -116,3 +112,4 @@ void delay_ms(u16 nms)
 	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;   /* Disable timer */
 	SysTick->VAL  = 0x00;                        /* Clear timer */
 }
+#endif
