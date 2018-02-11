@@ -72,7 +72,6 @@ void USART1_IRQHandler(void)
 {
     if (USART_GetITStatus(USART1, USART_IT_TXE) == SET)
     {
-        LED_A_ON;
         USART_SendData(USART1, USART_ReadBuffer(&USART_RingBufferTxStructure));
         if (USART_CountBuffer(&USART_RingBufferTxStructure) == 0)
         {
@@ -81,7 +80,6 @@ void USART1_IRQHandler(void)
     }
     else if (USART_GetITStatus(USART1, USART_IT_RXNE) == SET)
     {
-        LED_B_ON;
         USART_WriteBuffer(&USART_RingBufferRxStructure,
                          (u8)USART_ReceiveData(USART1));
         USART_ClearITPendingBit(USART1, USART_IT_RXNE);
