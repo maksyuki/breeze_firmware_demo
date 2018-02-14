@@ -69,12 +69,13 @@ OPT   += -fno-common
 OPT   += -ffunction-sections
 OPT   += -fdata-sections
 
-SPECS := --specs=rdimon.specs -u _printf_float
+SPECS := --specs=nano.specs -u _printf_float
+#SPECS += --specs=nano.specs
 
 FLAGS_MCU := -mcpu=$(MCU)
 FLAGS_AS  := $(SPECS) $(FLAGS_MCU) $(OPT) -c -g -gdwarf-2 -mthumb
 FLAGS_C   := $(SPECS) $(FLAGS_MCU) $(OPT) -c -g -gdwarf-2 -mthumb \
-             -fomit-frame-pointer -Wall -fverbose-asm $(DEFS)
+             -fomit-frame-pointer -Wall -fverbose-asm $(DEFS) -std=gnu99
 FLAGS_CXX := $(SPECS) $(FLAGS_MCU) $(OPT) -c -g -gdwarf-2 -mthumb \
              -fomit-frame-pointer -Wall -fverbose-asm -fno-exceptions \
              -fno-rtti -fno-threadsafe-statics -fvisibility=hidden -std=c++11 \

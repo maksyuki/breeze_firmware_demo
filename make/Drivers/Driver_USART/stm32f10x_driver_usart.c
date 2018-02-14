@@ -25,9 +25,12 @@ maksyuki    2016.12.06    Modify the module
 myyerrol    2017.04.14    Format the module
 *******************************************************************************/
 
+#include <errno.h>
+#include <sys/unistd.h>
 #include <stdio.h>
 #include "stm32f10x_driver_nvic.h"
 #include "stm32f10x_driver_usart.h"
+#include "stm32f10x_module_led.h"
 
 u8 usart_ring_buffer_rx[USART_BUFFER_SIZE];
 u8 usart_ring_buffer_tx[USART_BUFFER_SIZE];
@@ -134,3 +137,60 @@ u16 USART_CountBuffer(USART_RingBuffer *ring_buffer)
     // Return the length of available bytes.
     return (ring_buffer->index_wt - ring_buffer->index_rd) & ring_buffer->mask;
 }
+
+
+void __io_putchar(u8 ch)
+{
+    USART_SendData(USART1, (u8)ch);
+    while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
+}
+
+u8 USART_GetChar(void)
+{
+    while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET);
+    return (u8)USART_ReceiveData(USART1);
+}
+
+// int _write(int file, char *ptr, int len)
+// {
+//     int i;
+//
+//     switch (file)
+//     {
+//         case STDOUT_FILENO:
+//         {
+//             for (i = 0; i < len; i++)
+//             {
+//                 USART_PutChar(*ptr++ & (u16)0x01FF);
+//             }
+//             break;
+//         }
+//         case STDERR_FILENO:
+//         {
+//             for (i = 0; i < len; i++)
+//             {
+//                 USART_PutChar(*ptr++ & (u16)0x01FF);
+//             }
+//             break;
+//         }
+//         default:
+//         {
+//             errno = EBADF;
+//             return -1;
+//         }
+//     }
+//
+//     return len;
+// }
+
+// int _write(int fd, char *pBuffer, int size)
+// {
+//     for(int i = 0; i < size; i++)
+//     {
+//         while(!(USART1->SR & USART_SR_TXE))
+//         {
+//         }
+//         USART_SendData(USART1, pBuffer[i]);
+//     }
+//     return size;
+// }

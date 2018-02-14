@@ -55,4 +55,7 @@ extern void USART_WriteBuffer(USART_RingBuffer *ring_buffer, u8 byte);
 extern u8   USART_ReadBuffer(USART_RingBuffer *ring_buffer);
 extern u16  USART_CountBuffer(USART_RingBuffer *ring_buffer);
 
+void USART_PutChar(u8 ch);
+u8 USART_GetChar(void);
+
 #endif

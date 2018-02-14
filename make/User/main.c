@@ -1,17 +1,18 @@
+#include <stdio.h>
 #include "stm32f10x_it.h"
-// #include "stm32f10x_driver_clock.h"
-// #include "stm32f10x_driver_delay.h"
+#include "stm32f10x_driver_clock.h"
+#include "stm32f10x_driver_delay.h"
 // #include "stm32f10x_driver_eeprom.h"
 // #include "stm32f10x_driver_flash.h"
 // #include "stm32f10x_driver_iic.h"
-// #include "stm32f10x_driver_nvic.h"
-// #include "stm32f10x_driver_io.h"
+#include "stm32f10x_driver_nvic.h"
+#include "stm32f10x_driver_io.h"
 // #include "stm32f10x_driver_timer.h"
-// #include "stm32f10x_driver_usart.h"
+#include "stm32f10x_driver_usart.h"
 // #include "stm32f10x_module_battery.h"
 // #include "stm32f10x_module_comm_link.h"
 #include "stm32f10x_module_led.h"
-// #include "stm32f10x_module_motor.h"
+#include "stm32f10x_module_motor.h"
 // #include "stm32f10x_module_mpu6050.h"
 // #include "stm32f10x_module_ms5611.h"
 // #include "stm32f10x_module_nrf24l01.h"
@@ -25,14 +26,19 @@
 
 void Hardware_Init(void)
 {
-    // Clock_Init();
-    // Delay_Init();
-    // USART_InitUSART(115200);
+    Clock_Init();
+    Delay_Init();
+    // SysTick open system tick timer and initialize its interrupt.
+    // Interrupt overflow time is 1ms
+    // SysTick_Config(SystemCoreClock / 1000);
+
+    USART_InitUSART(115200);
+    // UART1_init(72, 115200);
     // Timer_InitTIM4(1000, clock_system);
     // Flash_Unlock();
     // EEPROM_LoadParamsFromEEPROM();
     LED_Init();
-    // Motor_Init();
+    Motor_Init();
     // Battery_Init();
     // IIC_Init();
     // MPU6050_Init();
@@ -44,17 +50,56 @@ void Hardware_Init(void)
     // control_altitude_mode = CONTROL_STATE_MANUAL;
 }
 
+
 int main(void)
 {
     Hardware_Init();
-    // LED_SetInitialLight();
-
-    while(1)
-    {
-        LED_A_ON;
-        LED_B_ON;
-        LED_C_ON;
+    LED_SetInitialLight();
+    //Motor_SetPWM(200, 200, 200, 200);
+    // while(1) {
+    //     LED_C_ON;
+    //     USART_PutChar((u16)'a');
+    // }
+    while(1) {
         LED_D_ON;
+        printf("I am maksyuki\n");
+        // USART_PutChar('a' & (u16)0x01FF);
+        // USART_PutChar('b' & (u16)0x01FF);
+        LED_A_ON;
+    }
+    // u16 t;
+	// u16 len;
+	// u16 tt = 0;
+    // while(1) {
+    //     if(USART_RX_STA & 0x8000) {
+    //         len = USART_RX_STA & 0x3f;
+    //         printf("\r\n you send message:\r\n\r\n");
+    //         for(t = 0; t < len; t++) {
+    //             USART_SendData(USART1, USART_RX_BUF[t]);
+    //             while(USART_GetITStatus(USART1, USART_FLAG_TC) != SET);
+    //         }
+    //         printf("\r\n\r\n");
+    //         USART_RX_STA = 0;
+    //     }
+    //     else {
+    //         tt++;
+    //         if(tt >= 0 && tt <= 80) {
+    //             printf("I am maksyuki\n");
+    //         }
+    //         else if(tt >= 0 && tt <= 100) {
+    //             printf("I am supermaker\n");
+    //         }
+    //         Delay_TimeMs(10);
+    //     }
+    // }
+
+
+    // while(1)
+    // {
+        // LED_A_ON;
+        // LED_B_ON;
+        // LED_C_ON;
+        // LED_D_ON;
         // if (timer_loop_flag_100hz)
         // {
         //     timer_loop_flag_100hz    = false;
@@ -105,5 +150,5 @@ int main(void)
         //     Flight_HandleFailures();
         //     LED_JumpStateMachine();
         // }
-    }
+    // }
 }
