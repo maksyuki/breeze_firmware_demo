@@ -103,7 +103,7 @@ s8 Clock_InitSystemClockHSE(u8 pll_multi)
     // Set PLL 2~16.
     RCC->CFGR  |= pll_multi << 18;
     // PLLXTPRE.
-    RCC->CFGR  |= 1 << 17;
+    RCC->CFGR  |= 1 << 17; // important!!!!!!
     // PLLSRC ON.
     RCC->CFGR  |= 1 << 16;
     // FLASH 2 delay period.
