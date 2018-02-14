@@ -32,8 +32,8 @@ void Hardware_Init(void)
     // Interrupt overflow time is 1ms
     // SysTick_Config(SystemCoreClock / 1000);
 
-    USART_InitUSART(115200);
-    // UART1_init(72, 115200);
+    // USART_InitUSART(115200);
+    UART1_init(72, 115200);
     // Timer_InitTIM4(1000, clock_system);
     // Flash_Unlock();
     // EEPROM_LoadParamsFromEEPROM();
@@ -55,18 +55,8 @@ int main(void)
 {
     Hardware_Init();
     LED_SetInitialLight();
+    while(1) printf("hello world!!!\n");
     //Motor_SetPWM(200, 200, 200, 200);
-    // while(1) {
-    //     LED_C_ON;
-    //     USART_PutChar((u16)'a');
-    // }
-    while(1) {
-        LED_D_ON;
-        printf("I am maksyuki\n");
-        // USART_PutChar('a' & (u16)0x01FF);
-        // USART_PutChar('b' & (u16)0x01FF);
-        LED_A_ON;
-    }
     // u16 t;
 	// u16 len;
 	// u16 tt = 0;
