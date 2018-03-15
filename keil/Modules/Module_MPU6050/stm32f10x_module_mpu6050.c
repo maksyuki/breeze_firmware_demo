@@ -500,7 +500,7 @@ u8 MPU6050_GetOTPBankValid(void)
 // return 0: Data register has not updated.
 unsigned char MPU6050_IsDRY(void)
 {
-    if (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_5) == Bit_SET)
+    if (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_4) == Bit_SET)
     {
         return 1;
     }

@@ -87,7 +87,7 @@ myyerrol    2017.04.22    Format the module
 
 #include "stm32f10x.h"
 
-#define MPU6050_DEVICE_ADDR                    0XD0
+#define MPU6050_DEVICE_ADDR                    0XD2
 
 // [7] PWR_MODE, [6:1] XG_OFFS_TC, [0] OTP_BNK_VLD.
 #define MPU6050_RA_XG_OFFS_TC                  0X00
