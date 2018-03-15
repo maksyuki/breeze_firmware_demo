@@ -54,7 +54,7 @@
           <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\_build\</ListingPath>
+          <ListingPath>.\Build\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -373,7 +373,7 @@
               <MiscControls></MiscControls>
               <Define>BLE_STACK_SUPPORT_REQD NRF51422 BOARD_PCA10028 NRF_SD_BLE_API_VERSION=2 S130 NRF51 SOFTDEVICE_PRESENT SWI_DISABLE0</Define>
               <Undefine></Undefine>
-              <IncludePath>..\User;..\Components;..\Components\ble\ble_advertising;..\Components\ble\ble_dtm;..\Components\ble\ble_racp;..\Components\ble\ble_services\ble_ancs_c;..\Components\ble\ble_services\ble_ans_c;..\Components\ble\ble_services\ble_bas;..\Components\ble\ble_services\ble_bas_c;..\Components\ble\ble_services\ble_cscs;..\Components\ble\ble_services\ble_cts_c;..\Components\ble\ble_services\ble_dfu;..\Components\ble\ble_services\ble_dis;..\Components\ble\ble_services\ble_gls;..\Components\ble\ble_services\ble_hids;..\Components\ble\ble_services\ble_hrs;..\Components\ble\ble_services\ble_hrs_c;..\Components\ble\ble_services\ble_hts;..\Components\ble\ble_services\ble_ias;..\Components\ble\ble_services\ble_ias_c;..\Components\ble\ble_services\ble_lbs;..\Components\ble\ble_services\ble_lbs_c;..\Components\ble\ble_services\ble_lls;..\Components\ble\ble_services\ble_nus;..\Components\ble\ble_services\ble_nus_c;..\Components\ble\ble_services\ble_rscs;..\Components\ble\ble_services\ble_rscs_c;..\Components\ble\ble_services\ble_tps;..\Components\ble\common;..\Components\ble\nrf_ble_qwr;..\Components\ble\peer_manager;..\Components\boards;..\Components\drivers_nrf\adc;..\Components\drivers_nrf\clock;..\Components\drivers_nrf\common;..\Components\drivers_nrf\comp;..\Components\drivers_nrf\delay;..\Components\drivers_nrf\gpiote;..\Components\drivers_nrf\hal;..\Components\drivers_nrf\i2s;..\Components\drivers_nrf\lpcomp;..\Components\drivers_nrf\pdm;..\Components\drivers_nrf\power;..\Components\drivers_nrf\ppi;..\Components\drivers_nrf\pwm;..\Components\drivers_nrf\qdec;..\Components\drivers_nrf\rng;..\Components\drivers_nrf\rtc;..\Components\drivers_nrf\saadc;..\Components\drivers_nrf\spi_master;..\Components\drivers_nrf\spi_slave;..\Components\drivers_nrf\swi;..\Components\drivers_nrf\timer;..\Components\drivers_nrf\twi_master;..\Components\drivers_nrf\twis_slave;..\Components\drivers_nrf\uart;..\Components\drivers_nrf\usbd;..\Components\drivers_nrf\wdt;..\Components\libraries\bsp;..\Components\libraries\button;..\Components\libraries\crc16;..\Components\libraries\crc32;..\Components\libraries\csense;..\Components\libraries\csense_drv;..\Components\libraries\experimental_section_vars;..\Components\libraries\fds;..\Components\libraries\fifo;..\Components\libraries\fstorage;..\Components\libraries\gpiote;..\Components\libraries\hardfault;..\Components\libraries\hci;..\Components\libraries\led_softblink;..\Components\libraries\log;..\Components\libraries\log\src;..\Components\libraries\low_power_pwm;..\Components\libraries\mem_manager;..\Components\libraries\pwm;..\Components\libraries\queue;..\Components\libraries\scheduler;..\Components\libraries\slip;..\Components\libraries\timer;..\Components\libraries\twi;..\Components\libraries\uart;..\Components\libraries\usbd;..\Components\libraries\usbd\class\audio;..\Components\libraries\usbd\class\cdc;..\Components\libraries\usbd\class\cdc\acm;..\Components\libraries\usbd\class\hid;..\Components\libraries\usbd\class\hid\generic;..\Components\libraries\usbd\class\hid\kbd;..\Components\libraries\usbd\class\hid\mouse;..\Components\libraries\usbd\class\msc;..\Components\libraries\usbd\config;..\Components\libraries\util;..\Components\softdevice\common\softdevice_handler;..\Components\softdevice\s130\headers;..\Components\softdevice\s130\headers\nrf51;..\Components\toolchain;..\..\..\..\..\..\external\segger_rtt</IncludePath>
+              <IncludePath>..\User;..\Components;..\Components\ble\ble_advertising;..\Components\ble\ble_dtm;..\Components\ble\ble_racp;..\Components\ble\ble_services\ble_ancs_c;..\Components\ble\ble_services\ble_ans_c;..\Components\ble\ble_services\ble_bas;..\Components\ble\ble_services\ble_bas_c;..\Components\ble\ble_services\ble_cscs;..\Components\ble\ble_services\ble_cts_c;..\Components\ble\ble_services\ble_dfu;..\Components\ble\ble_services\ble_dis;..\Components\ble\ble_services\ble_gls;..\Components\ble\ble_services\ble_hids;..\Components\ble\ble_services\ble_hrs;..\Components\ble\ble_services\ble_hrs_c;..\Components\ble\ble_services\ble_hts;..\Components\ble\ble_services\ble_ias;..\Components\ble\ble_services\ble_ias_c;..\Components\ble\ble_services\ble_lbs;..\Components\ble\ble_services\ble_lbs_c;..\Components\ble\ble_services\ble_lls;..\Components\ble\ble_services\ble_nus;..\Components\ble\ble_services\ble_nus_c;..\Components\ble\ble_services\ble_rscs;..\Components\ble\ble_services\ble_rscs_c;..\Components\ble\ble_services\ble_tps;..\Components\ble\common;..\Components\ble\nrf_ble_qwr;..\Components\ble\peer_manager;..\Components\boards;..\Components\drivers_nrf\adc;..\Components\drivers_nrf\clock;..\Components\drivers_nrf\common;..\Components\drivers_nrf\comp;..\Components\drivers_nrf\delay;..\Components\drivers_nrf\gpiote;..\Components\drivers_nrf\hal;..\Components\drivers_nrf\i2s;..\Components\drivers_nrf\lpcomp;..\Components\drivers_nrf\pdm;..\Components\drivers_nrf\power;..\Components\drivers_nrf\ppi;..\Components\drivers_nrf\pwm;..\Components\drivers_nrf\qdec;..\Components\drivers_nrf\rng;..\Components\drivers_nrf\rtc;..\Components\drivers_nrf\saadc;..\Components\drivers_nrf\spi_master;..\Components\drivers_nrf\spi_slave;..\Components\drivers_nrf\swi;..\Components\drivers_nrf\timer;..\Components\drivers_nrf\twi_master;..\Components\drivers_nrf\twis_slave;..\Components\drivers_nrf\uart;..\Components\drivers_nrf\usbd;..\Components\drivers_nrf\wdt;..\Components\libraries\bsp;..\Components\libraries\button;..\Components\libraries\crc16;..\Components\libraries\crc32;..\Components\libraries\csense;..\Components\libraries\csense_drv;..\Components\libraries\experimental_section_vars;..\Components\libraries\fds;..\Components\libraries\fifo;..\Components\libraries\fstorage;..\Components\libraries\gpiote;..\Components\libraries\hardfault;..\Components\libraries\hci;..\Components\libraries\led_softblink;..\Components\libraries\log;..\Components\libraries\log\src;..\Components\libraries\low_power_pwm;..\Components\libraries\mem_manager;..\Components\libraries\pwm;..\Components\libraries\queue;..\Components\libraries\scheduler;..\Components\libraries\slip;..\Components\libraries\timer;..\Components\libraries\twi;..\Components\libraries\uart;..\Components\libraries\usbd;..\Components\libraries\usbd\class\audio;..\Components\libraries\usbd\class\cdc;..\Components\libraries\usbd\class\cdc\acm;..\Components\libraries\usbd\class\hid;..\Components\libraries\usbd\class\hid\generic;..\Components\libraries\usbd\class\hid\kbd;..\Components\libraries\usbd\class\hid\mouse;..\Components\libraries\usbd\class\msc;..\Components\libraries\usbd\config;..\Components\libraries\util;..\Components\softdevice\common\softdevice_handler;..\Components\softdevice\s130\headers;..\Components\softdevice\s130\headers\nrf51;..\Components\toolchain;..\Segger_RTT</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -604,158 +604,17 @@
             <File>
               <FileName>RTT_Syscalls_KEIL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\external\segger_rtt\RTT_Syscalls_KEIL.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>0</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>0</vShortEn>
-                    <vShortWch>0</vShortWch>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
+              <FilePath>..\Segger_RTT\RTT_Syscalls_KEIL.c</FilePath>
             </File>
             <File>
               <FileName>SEGGER_RTT.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\external\segger_rtt\SEGGER_RTT.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>0</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>0</vShortEn>
-                    <vShortWch>0</vShortWch>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
+              <FilePath>..\Segger_RTT\SEGGER_RTT.c</FilePath>
             </File>
             <File>
               <FileName>SEGGER_RTT_printf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\external\segger_rtt\SEGGER_RTT_printf.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>0</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>0</vShortEn>
-                    <vShortWch>0</vShortWch>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
+              <FilePath>..\Segger_RTT\SEGGER_RTT_printf.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1374,158 +1233,17 @@
             <File>
               <FileName>RTT_Syscalls_KEIL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\external\segger_rtt\RTT_Syscalls_KEIL.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>0</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>0</vShortEn>
-                    <vShortWch>0</vShortWch>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
+              <FilePath>..\Segger_RTT\RTT_Syscalls_KEIL.c</FilePath>
             </File>
             <File>
               <FileName>SEGGER_RTT.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\external\segger_rtt\SEGGER_RTT.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>0</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>0</vShortEn>
-                    <vShortWch>0</vShortWch>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
+              <FilePath>..\Segger_RTT\SEGGER_RTT.c</FilePath>
             </File>
             <File>
               <FileName>SEGGER_RTT_printf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\external\segger_rtt\SEGGER_RTT_printf.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>0</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>0</vShortEn>
-                    <vShortWch>0</vShortWch>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
+              <FilePath>..\Segger_RTT\SEGGER_RTT_printf.c</FilePath>
             </File>
           </Files>
         </Group>
