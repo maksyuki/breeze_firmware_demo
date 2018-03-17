@@ -15,7 +15,7 @@ Function List:
              2. void NVIC_InitUSART1(void);
              3. void NVIC_InitTIM(void);
              4. void NVIC_InitTIM3(void);
-             5. void NVIC_InitTIM4(void);
+             5. void NVIC_InitTIM1(void);
 History:
 <author>    <date>        <desc>
 myyerrol    2017.04.14    Modify the module
@@ -35,7 +35,7 @@ void NVIC_InitUSART1(void)
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
     NVIC_InitStructure.NVIC_IRQChannel                   = USART1_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority        = 1;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelCmd                = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 }
@@ -43,7 +43,7 @@ void NVIC_InitUSART1(void)
 // void NVIC_InitTIM(void)
 // {
 //     NVIC_InitTIM3();
-//     NVIC_InitTIM4();
+//     NVIC_InitTIM1();
 // }
 //
 // void NVIC_InitTIM3(void)
@@ -58,14 +58,15 @@ void NVIC_InitUSART1(void)
 //     NVIC_Init(&NVIC_InitStructure);
 // }
 //
-// void NVIC_InitTIM4(void)
-// {
-//     NVIC_InitTypeDef NVIC_InitStructure;
-//
-//     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-//     NVIC_InitStructure.NVIC_IRQChannel                   = TIM4_IRQn;
-//     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-//     NVIC_InitStructure.NVIC_IRQChannelSubPriority        = 1;
-//     NVIC_InitStructure.NVIC_IRQChannelCmd                = ENABLE;
-//     NVIC_Init(&NVIC_InitStructure);
-// }
+
+void NVIC_InitTIM1(void)
+{
+    NVIC_InitTypeDef NVIC_InitStructure;
+
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+    NVIC_InitStructure.NVIC_IRQChannel                   = TIM1_UP_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority        = 0;
+    NVIC_InitStructure.NVIC_IRQChannelCmd                = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+}

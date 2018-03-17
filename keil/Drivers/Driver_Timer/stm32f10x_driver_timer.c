@@ -12,7 +12,7 @@ Description: implement the timer set operation
 Others:      none
 Function List:
              1. void Timer_InitTIM3(u16 arr, u16 psc)
-             2. void Timer_InitTIM4(u16 arr, u16 psc);
+             2. void Timer_InitTIM1(u16 arr, u16 psc);
 History:
 1. <author>    <date>         <desc>
    maksyuki  2016.12.03  modify the module
@@ -20,6 +20,8 @@ History:
 
 #include "stm32f10x_driver_nvic.h"
 #include "stm32f10x_driver_timer.h"
+
+vu16 timer_dmp = 0;
 
 vu16 timer_loop_cnt_10hz  = 0;
 vu16 timer_loop_cnt_20hz  = 0;
@@ -52,23 +54,24 @@ bool timer_loop_flag_100hz = false;
 //    TIM_Cmd(TIM3, ENABLE);
 //}
 
-void Timer_InitTIM4(u16 arr, u16 psc)
+void Timer_InitTIM1(u16 arr, u16 psc)
 {
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
 
-    NVIC_InitTIM4();
+    NVIC_InitTIM1();
 
-    TIM_DeInit(TIM4);
+    TIM_DeInit(TIM1);
 
-    TIM_TimeBaseStructure.TIM_Period        = arr - 1;
-    TIM_TimeBaseStructure.TIM_Prescaler     = psc - 1;
-    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
-    TIM_TimeBaseStructure.TIM_CounterMode   = TIM_CounterMode_Up;
-    TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStructure);
+    TIM_TimeBaseStructure.TIM_Period            = arr - 1;
+    TIM_TimeBaseStructure.TIM_Prescaler         = psc - 1;
+    TIM_TimeBaseStructure.TIM_ClockDivision     = TIM_CKD_DIV1;
+    TIM_TimeBaseStructure.TIM_CounterMode       = TIM_CounterMode_Up;
+    TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+    TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
 
-    TIM_ClearFlag(TIM4, TIM_FLAG_Update);
-    TIM_ITConfig(TIM4, TIM_IT_Update, ENABLE);
-    TIM_Cmd(TIM4, ENABLE);
+    TIM_ClearFlag(TIM1, TIM_FLAG_Update);
+    TIM_ITConfig(TIM1, TIM_IT_Update, ENABLE);
+    TIM_Cmd(TIM1, ENABLE);
 }

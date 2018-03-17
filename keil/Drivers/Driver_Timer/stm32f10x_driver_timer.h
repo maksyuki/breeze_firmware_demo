@@ -12,7 +12,7 @@ Description: Declare the timer set operation
 Others:      none
 Function List:
              1. void Timer_InitTIM3(u16 arr, u16 psc)
-             2. void Timer_InitTIM4(u16 arr, u16 psc);
+             2. void Timer_InitTIM1(u16 arr, u16 psc);
 History:
 <author>    <date>        <desc>
 maksyuki    2016.12.03    Modify the module
@@ -24,6 +24,9 @@ myyerrol    2017.04.24    Format the module
 
 #include <stdbool.h>
 #include "stm32f10x.h"
+
+// The interrupt variables of timer for mpu6050 dmp.
+extern vu16 timer_dmp;
 
 // The interrupt variables of timer for main control.
 extern vu16 timer_loop_cnt_10hz;
@@ -38,6 +41,6 @@ extern bool timer_loop_flag_50hz;
 extern bool timer_loop_flag_100hz;
 
 extern void Timer_InitTIM3(u16 arr, u16 psc);
-extern void Timer_InitTIM4(u16 arr, u16 psc);
+extern void Timer_InitTIM1(u16 arr, u16 psc);
 
 #endif

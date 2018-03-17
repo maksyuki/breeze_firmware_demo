@@ -30,6 +30,6 @@ extern void NVIC_InitUSART(void);
 extern void NVIC_InitUSART1(void);
 extern void NVIC_InitTIM(void);
 extern void NVIC_InitTIM3(void);
-extern void NVIC_InitTIM4(void);
+extern void NVIC_InitTIM1(void);
 
 #endif
