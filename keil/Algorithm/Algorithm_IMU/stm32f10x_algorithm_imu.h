@@ -44,25 +44,25 @@ myyerrol    2017.05.02    Format the module
 #define IMU_HIGH_FREQ_CTRL                      1
 
 #ifdef  IMU_HIGH_FREQ_CTRL
-#define IMU_SAMPLE_RATE                         200.0f
+#define IMU_SAMPLE_RATE                         200.0F
 #else
-#define IMU_SAMPLE_RATE                         100.0f
+#define IMU_SAMPLE_RATE                         100.0F
 #endif
 
-#define IMU_FILTER_CUTOFF_FREQ                  30.0f
+#define IMU_FILTER_CUTOFF_FREQ                  30.0F
 // Calibrate time.
 // Unit: ms.
 #define IMU_CALI_TIME_ACC                       3000
 // Unit: us.
 #define IMU_CALI_TIME_GYR                       3000000l
 // Unit: m/s^2.
-#define IMU_CONSTANTS_ONE_G                     9.80665f
+#define IMU_CONSTANTS_ONE_G                     9.80665F
 // Unit: kg/m^3.
-#define IMU_CONSTANTS_AIR_DENSITY_SEA_LEVEL_15C 1.225f
+#define IMU_CONSTANTS_AIR_DENSITY_SEA_LEVEL_15C 1.225F
 // Unit: j/(kg*k).
-#define IMU_CONSTANTS_AIR_GAS_CONST             287.1f
+#define IMU_CONSTANTS_AIR_GAS_CONST             287.1F
 // Unit: deg.
-#define IMU_CONSTANTS_ABSOLUTE_NULL_CELSIUS    -273.15f
+#define IMU_CONSTANTS_ABSOLUTE_NULL_CELSIUS    -273.15F
 // Unit: m.
 #define IMU_CONSTANTS_RADIUS_OF_EARTH           6371000
 
@@ -72,18 +72,18 @@ myyerrol    2017.05.02    Format the module
 #define IMU_THRUST                              3
 
 // Unit: m/s^2.
-#define IMU_SENSOR_MAX_G                        8.0f
+#define IMU_SENSOR_MAX_G                        8.0F
 // Unit: deg/s
-#define IMU_SENSOR_MAX_R                        2000.0f
-#define IMU_ACC_SCALE                           (IMU_SENSOR_MAX_G / 32768.0f)
-#define IMU_GYR_SCALE                           (IMU_SENSOR_MAX_R / 32768.0f)
+#define IMU_SENSOR_MAX_R                        2000.0F
+#define IMU_ACC_SCALE                           (IMU_SENSOR_MAX_G / 32768.0F)
+#define IMU_GYR_SCALE                           (IMU_SENSOR_MAX_R / 32768.0F)
 
 // Unit: m/s^2.
 #define IMU_ACCZ_ERR_MAX                        0.05
 #define IMU_CHECK_COUNT                         5
 
-#define IMU_SO3_COMP_PARAMS_KP                  1.0f
-#define IMU_SO3_COMP_PARAMS_KI                  0.05f
+#define IMU_SO3_COMP_PARAMS_KP                  1.0F
+#define IMU_SO3_COMP_PARAMS_KI                  0.05F
 
 // acc_b:  Acceleration in Body frame.
 // acc_g:  Acceleration in Ground frame.
