@@ -39,30 +39,30 @@ myyerrol    2017.05.02    Format the module
 #include "config.h"
 #include "stm32f10x_driver_delay.h"
 #include "stm32f10x_module_mpu6050.h"
-#include "stm32f10x_algorithm_filter.h"
 #include "stm32f10x_algorithm_imu.h"
+#include "stm32f10x_algorithm_filter.h"
 
 bool imu_cali_flag = false;
 IMU_Table IMU_TableStructure;
 
 // Auxiliary variables to reduce number of repeated operations.
 // Quaternion of sensor frame relative to auxiliary frame.
-static float q0  = 1.0f;
-static float q1  = 0.0f;
-static float q2  = 0.0f;
-static float q3  = 0.0f;
+static float q0  = 1.0F;
+static float q1  = 0.0F;
+static float q2  = 0.0F;
+static float q3  = 0.0F;
 // Quaternion of sensor frame relative to auxiliary frame.
-static float dq0 = 0.0f;
-static float dq1 = 0.0f;
-static float dq2 = 0.0f;
-static float dq3 = 0.0f;
+static float dq0 = 0.0F;
+static float dq1 = 0.0F;
+static float dq2 = 0.0F;
+static float dq3 = 0.0F;
 
 static float q0_q0, q0_q1, q0_q2, q0_q3;
 static float q1_q1, q1_q2, q1_q3;
 static float q2_q2, q2_q3;
 static float q3_q3;
 // Bias estimation.
-static float gyr_bias[3] = {0.0f, 0.0f, 0.0f};
+static float gyr_bias[3] = {0.0F, 0.0F, 0.0F};
 static bool  filter_init_flag = false;
 
 // Convert DCM from Ground frame to Body frame.
@@ -71,12 +71,12 @@ void IMU_ConvertEularToDCM(float dcm[3][3], float roll, float pitch, float yaw)
     float sinx, siny, sinz, cosx, cosy, cosz;
     float cosz_cosx, cosz_cosy, sinz_cosx, cosz_sinx, sinz_sinx;
 
-    sinx = sinf(roll *  M_PI / 180.0f);
-    cosx = cosf(roll *  M_PI / 180.0f);
-    siny = sinf(pitch * M_PI / 180.0f);
-    cosy = cosf(pitch * M_PI / 180.0f);
-    sinz = sinf(yaw *   M_PI / 180.0f);
-    cosz = cosf(yaw *   M_PI / 180.0f);
+    sinx = sinf(roll *  M_PI / 180.0F);
+    cosx = cosf(roll *  M_PI / 180.0F);
+    siny = sinf(pitch * M_PI / 180.0F);
+    cosy = cosf(pitch * M_PI / 180.0F);
+    sinz = sinf(yaw *   M_PI / 180.0F);
+    cosz = cosf(yaw *   M_PI / 180.0F);
 
     cosz_cosx = cosz * cosx;
     cosz_cosy = cosz * cosy;
@@ -107,7 +107,7 @@ void IMU_GetSensorData(void)
         IMU_TableStructure.acc_raw[i] = (float) IMU_TableStructure.acc_adc[i] *
             IMU_ACC_SCALE * IMU_CONSTANTS_ONE_G;
         IMU_TableStructure.gyr_raw[i] = (float) IMU_TableStructure.gyr_adc[i] *
-            IMU_GYR_SCALE * M_PI / 180.0f;
+            IMU_GYR_SCALE * M_PI / 180.0F;
     }
 
     IMU_TableStructure.acc_b[0] = Filter_ApplyLPF2p_1(
@@ -160,14 +160,14 @@ void  IMU_InitNonLinearSO3AHRS(float acc_x, float acc_y, float acc_z,
 
     init_hdg = atan2f(-mag_y_temp, mag_x_temp);
 
-    cos_roll    = cosf(init_roll * 0.5f);
-    sin_roll    = sinf(init_roll * 0.5f);
+    cos_roll    = cosf(init_roll * 0.5F);
+    sin_roll    = sinf(init_roll * 0.5F);
 
-    cos_pitch   = cosf(init_pitch * 0.5f);
-    sin_pitch   = sinf(init_pitch * 0.5f);
+    cos_pitch   = cosf(init_pitch * 0.5F);
+    sin_pitch   = sinf(init_pitch * 0.5F);
 
-    cos_heading = cosf(init_hdg * 0.5f);
-    sin_heading = sinf(init_hdg * 0.5f);
+    cos_heading = cosf(init_hdg * 0.5F);
+    sin_heading = sinf(init_hdg * 0.5F);
 
     q0 = cos_roll * cos_pitch * cos_heading + sin_roll * sin_pitch *
         sin_heading;
@@ -196,29 +196,29 @@ void IMU_StartSO3Thread(void)
     u8    i;
     u32   timestamp_now;
     // Unit: s.
-    float delta_time    = 0.01f;
+    float delta_time    = 0.01F;
     // Output euler angles.
     // Unit: rad/s
-    float euler[3]      = {0.0f, 0.0f, 0.0f};
+    float euler[3]      = {0.0F, 0.0F, 0.0F};
     // Rotation matrix.
-    float rot_matrix[9] = {1.f,  0.0f,  0.0f, 0.0f,  1.f,  0.0f, 0.0f,  0.0f,
-                           1.f};
+    float rot_matrix[9] = {1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F,
+                           1.0F};
     // Unit: m/s^2.
-    float acc[3]        = {0.0f, 0.0f, 0.0f};
-    float mag[3]        = {0.0f, 0.0f, 0.0f};
+    float acc[3]        = {0.0F, 0.0F, 0.0F};
+    float mag[3]        = {0.0F, 0.0F, 0.0F};
     // Unit: rad/s.
-    float gyr[3]        = {0.0f, 0.0f, 0.0f};
+    float gyr[3]        = {0.0F, 0.0F, 0.0F};
     static u16 offset_count        = 0;
     // Unit: us.
     static u32 timestamp_pre       = 0;
     // Unit: us.
     static u32 timestamp_start     = 0;
     /* Need to calc gyr offset before IMU_TableStructure start working */
-    static float gyr_offset_sum[3] = {0.0f, 0.0f, 0.0f};
+    static float gyr_offset_sum[3] = {0.0F, 0.0F, 0.0F};
 
     timestamp_now = Delay_GetRuntimeUs();
     delta_time    = (timestamp_pre > 0) ? (timestamp_now - timestamp_pre) /
-        1000000.0f : 0;
+        1000000.0F : 0;
     timestamp_pre = timestamp_now;
 
     IMU_GetSensorData();
@@ -265,13 +265,13 @@ void IMU_StartSO3Thread(void)
 
     // Convert q->R, This R converts Inertial frame to Body frame.
     rot_matrix[0] = q0_q0 + q1_q1 - q2_q2 - q3_q3;
-    rot_matrix[1] = 2.f * (q1 * q2 + q0 * q3);
-    rot_matrix[2] = 2.f * (q1 * q3 - q0 * q2);
-    rot_matrix[3] = 2.f * (q1 * q2 - q0 * q3);
+    rot_matrix[1] = 2.0F * (q1 * q2 + q0 * q3);
+    rot_matrix[2] = 2.0F * (q1 * q3 - q0 * q2);
+    rot_matrix[3] = 2.0F * (q1 * q2 - q0 * q3);
     rot_matrix[4] = q0_q0 - q1_q1 + q2_q2 - q3_q3;
-    rot_matrix[5] = 2.f * (q2 * q3 + q0 * q1);
-    rot_matrix[6] = 2.f * (q1 * q3 + q0 * q2);
-    rot_matrix[7] = 2.f * (q2 * q3 - q0 * q1);
+    rot_matrix[5] = 2.0F * (q2 * q3 + q0 * q1);
+    rot_matrix[6] = 2.0F * (q1 * q3 + q0 * q2);
+    rot_matrix[7] = 2.0F * (q2 * q3 - q0 * q1);
     rot_matrix[8] = q0_q0 - q1_q1 - q2_q2 + q3_q3;
 
     // Convert from Rotation matrix to Euler angles.
@@ -292,9 +292,9 @@ void IMU_StartSO3Thread(void)
     IMU_TableStructure.pitch_rad = euler[1];
     IMU_TableStructure.yaw_rad   = euler[2];
 
-    IMU_TableStructure.roll_ang  = euler[0] * 180.0f / M_PI;
-    IMU_TableStructure.pitch_ang = euler[1] * 180.0f / M_PI;
-    IMU_TableStructure.yaw_ang   = euler[2] * 180.0f / M_PI;
+    IMU_TableStructure.roll_ang  = euler[0] * 180.0F / M_PI;
+    IMU_TableStructure.pitch_ang = euler[1] * 180.0F / M_PI;
+    IMU_TableStructure.yaw_ang   = euler[2] * 180.0F / M_PI;
 }
 
 // Using Mahony complementary filtering algorithm.
@@ -304,9 +304,9 @@ void  IMU_UpdateNonLinearSO3AHRS(float gyr_x,  float gyr_y,  float gyr_z,
                                  float two_kp, float two_ki, float delta_time)
 {
     float recip_norm;
-    float halfex = 0.0f;
-    float halfey = 0.0f;
-    float halfez = 0.0f;
+    float halfex = 0.0F;
+    float halfey = 0.0F;
+    float halfez = 0.0F;
 
     // Make filter converge to initial solution faster.
     // WARNING: in case air reboot, this can cause problem. But this is very
@@ -318,7 +318,7 @@ void  IMU_UpdateNonLinearSO3AHRS(float gyr_x,  float gyr_y,  float gyr_z,
     }
 
     //If magnetometer measurement is available, use it.
-    if (!((mag_x == 0.0f) && (mag_y == 0.0f) && (mag_z == 0.0f)))
+    if (!((mag_x == 0.0F) && (mag_y == 0.0F) && (mag_z == 0.0F)))
     {
         float hx, hy, hz, bx, bz;
         float halfwx, halfwy, halfwz;
@@ -330,18 +330,18 @@ void  IMU_UpdateNonLinearSO3AHRS(float gyr_x,  float gyr_y,  float gyr_z,
         mag_y *= recip_norm;
         mag_z *= recip_norm;
         // Reference direction of Earth's magnetic field.
-        hx = 2.0f * (mag_x * (0.5f - q2_q2 - q3_q3) + mag_y * (q1_q2 - q0_q3) +
+        hx = 2.0F * (mag_x * (0.5F - q2_q2 - q3_q3) + mag_y * (q1_q2 - q0_q3) +
             mag_z * (q1_q3 + q0_q2));
-        hy = 2.0f * (mag_x * (q1_q2 + q0_q3) + mag_y * (0.5f - q1_q1 - q3_q3) +
+        hy = 2.0F * (mag_x * (q1_q2 + q0_q3) + mag_y * (0.5F - q1_q1 - q3_q3) +
             mag_z * (q2_q3 - q0_q1));
-        hz = 2.0f *  mag_x * (q1_q3 - q0_q2) + 2.0f * mag_y * (q2_q3 + q0_q1) +
-            2.0f * mag_z * (0.5f - q1_q1 - q2_q2);
+        hz = 2.0F *  mag_x * (q1_q3 - q0_q2) + 2.0F * mag_y * (q2_q3 + q0_q1) +
+            2.0F * mag_z * (0.5F - q1_q1 - q2_q2);
         bx = sqrt(hx * hx + hy * hy);
         bz = hz;
         // Estimated direction of magnetic field.
-        halfwx = bx * (0.5f - q2_q2 - q3_q3) + bz * (q1_q3 - q0_q2);
+        halfwx = bx * (0.5F - q2_q2 - q3_q3) + bz * (q1_q3 - q0_q2);
         halfwy = bx * (q1_q2 - q0_q3) + bz * (q0_q1 + q2_q3);
-        halfwz = bx * (q0_q2 + q1_q3) + bz * (0.5f - q1_q1 - q2_q2);
+        halfwz = bx * (q0_q2 + q1_q3) + bz * (0.5F - q1_q1 - q2_q2);
         // Error is sum of cross product between estimated direction and
         // measured direction of field vectors.
         halfex += (mag_y * halfwz - mag_z * halfwy);
@@ -351,7 +351,7 @@ void  IMU_UpdateNonLinearSO3AHRS(float gyr_x,  float gyr_y,  float gyr_z,
 
     // Compute feedback only if accelerometer measurement valid(avoids NaN in
     // accelerometer normalisation).
-    if (!((acc_x == 0.0f) && (acc_y == 0.0f) && (acc_z == 0.0f)))
+    if (!((acc_x == 0.0F) && (acc_y == 0.0F) && (acc_z == 0.0F)))
     {
         float halfvx, halfvy, halfvz;
         // Normalise accelerometer measurement.
@@ -364,7 +364,7 @@ void  IMU_UpdateNonLinearSO3AHRS(float gyr_x,  float gyr_y,  float gyr_z,
         // Estimated direction of gravity and magnetic field.
         halfvx = q1_q3 - q0_q2;
         halfvy = q0_q1 + q2_q3;
-        halfvz = q0_q0 - 0.5f + q3_q3;
+        halfvz = q0_q0 - 0.5F + q3_q3;
         // Error is sum of cross product between estimated direction and
         // measured direction of field vectors.
         halfex += acc_y * halfvz - acc_z * halfvy;
@@ -374,10 +374,10 @@ void  IMU_UpdateNonLinearSO3AHRS(float gyr_x,  float gyr_y,  float gyr_z,
 
     // Apply feedback only when valid data has been gathered from the
     // accelerometer or magnetometer.
-    if ((halfex != 0.0f) && (halfey != 0.0f) && (halfez != 0.0f))
+    if ((halfex != 0.0F) && (halfey != 0.0F) && (halfez != 0.0F))
     {
         // Compute and apply integral feedback if enabled.
-        if (two_ki > 0.0f)
+        if (two_ki > 0.0F)
         {
             // Integral error scaled by ki.
             gyr_bias[0] += two_ki * halfex * delta_time;
@@ -391,9 +391,9 @@ void  IMU_UpdateNonLinearSO3AHRS(float gyr_x,  float gyr_y,  float gyr_z,
         else
         {
             // Prevent integral windup.
-            gyr_bias[0] = 0.0f;
-            gyr_bias[1] = 0.0f;
-            gyr_bias[2] = 0.0f;
+            gyr_bias[0] = 0.0F;
+            gyr_bias[1] = 0.0F;
+            gyr_bias[2] = 0.0F;
         }
         // Apply proportional feedback.
         gyr_x += two_kp * halfex;
@@ -402,10 +402,10 @@ void  IMU_UpdateNonLinearSO3AHRS(float gyr_x,  float gyr_y,  float gyr_z,
     }
 
     // Time derivative of quaternion.
-    dq0 = 0.5f * (-q1 * gyr_x - q2 * gyr_y - q3 * gyr_z);
-    dq1 = 0.5f * ( q0 * gyr_x + q2 * gyr_z - q3 * gyr_y);
-    dq2 = 0.5f * ( q0 * gyr_y - q1 * gyr_z + q3 * gyr_x);
-    dq3 = 0.5f * ( q0 * gyr_z + q1 * gyr_y - q2 * gyr_x);
+    dq0 = 0.5F * (-q1 * gyr_x - q2 * gyr_y - q3 * gyr_z);
+    dq1 = 0.5F * ( q0 * gyr_x + q2 * gyr_z - q3 * gyr_y);
+    dq2 = 0.5F * ( q0 * gyr_y - q1 * gyr_z + q3 * gyr_x);
+    dq3 = 0.5F * ( q0 * gyr_z + q1 * gyr_y - q2 * gyr_x);
 
     q0 += delta_time * dq0;
     q1 += delta_time * dq1;
@@ -524,9 +524,9 @@ float IMU_CalculateInverseSqrt(float number)
     volatile long  i;
     volatile float x;
     volatile float y;
-    volatile const float f = 1.5f;
+    volatile const float f = 1.5F;
 
-    x = number * 0.5f;
+    x = number * 0.5F;
     y = number;
     i = *((long *)&y);
     i = 0X5F375A86 - (i >> 1);
