@@ -246,6 +246,95 @@ static void conn_params_init(void)
 }
 
 
+
+
+//=========================User code==========================
+//============================================================
+static void leds_init(void)
+{
+    nrf_gpio_cfg_output(17);
+    nrf_gpio_cfg_output(18);
+}
+
+APP_TIMER_DEF(LED0_toggle_timer_id);
+#define ADVERTISING_LED_OFF_INTERVAL 1800
+#define ADVERTISING_LED_ON_INTERVAL  200
+
+/**@brief Handle events from leds timer.
+ *
+ * @note Timer handler does not support returning an error code.
+ * Errors from bsp_led_indication() are not propagated.
+ *
+ * @param[in]   p_context   parameter registered in timer start function.
+ */
+
+static void LED_Indication(enum BLE_GAP_EVTS led_state);
+static enum BLE_GAP_EVTS cur_led_state = BLE_GAP_EVT_DISCONNECTED;
+
+static void leds_timer_handler(void * p_context)
+{
+    UNUSED_PARAMETER(p_context);
+    LED_Indication(cur_led_state);
+//UNUSED_VARIABLE(bsp_led_indication(m_stable_state));
+
+}
+
+/**@brief Function for the Timer initialization.
+ *
+ * @details Initializes the timer module. This creates and starts application timers.
+ */
+static void timers_init(void)
+{
+
+    // Initialize timer module.
+    APP_TIMER_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, false);
+
+    // Create timers.
+
+    /* YOUR_JOB: Create any timers to be used by the application.
+                 Below is an example of how to create a timer.
+                 For every new timer needed, increase the value of the macro APP_TIMER_MAX_TIMERS by
+                 one. */
+       uint32_t err_code;
+       err_code = app_timer_create(&LED0_toggle_timer_id, APP_TIMER_MODE_SINGLE_SHOT, leds_timer_handler);
+       APP_ERROR_CHECK(err_code);
+}
+
+//Use for toggling the LED0(pin 17)
+static void LED_Indication(enum BLE_GAP_EVTS led_state)
+{
+    uint32_t next_delay = 0;
+    cur_led_state = led_state;
+    
+    if (led_state == BLE_GAP_EVT_CONNECTED)
+    {
+       nrf_gpio_pin_set(17);
+    }
+    else if(led_state == BLE_GAP_EVT_DISCONNECTED)
+    {
+        bool pin_set = nrf_gpio_pin_out_read(17) ? true: false;
+
+        if (pin_set)
+        {
+            nrf_gpio_pin_clear(17);
+            next_delay = ADVERTISING_LED_OFF_INTERVAL;
+        }
+        else
+        {
+            nrf_gpio_pin_set(17);
+            next_delay = ADVERTISING_LED_ON_INTERVAL;
+        }
+        app_timer_start(LED0_toggle_timer_id, APP_TIMER_TICKS(next_delay, APP_TIMER_PRESCALER), NULL);
+    }
+    else // For sleeping mode
+    {
+        nrf_gpio_pin_clear(17);
+    }
+}
+//============================================================
+//=========================User code==========================
+
+
 /**@brief Function for putting the chip into sleep mode.
  *
  * @note This function will not return.
@@ -253,6 +342,7 @@ static void conn_params_init(void)
 static void sleep_mode_enter(void)
 {
     uint32_t err_code = bsp_indication_set(BSP_INDICATE_IDLE);
+    LED_Indication(99); // for debugging
     APP_ERROR_CHECK(err_code);
 
     // Prepare wakeup buttons.
@@ -279,6 +369,7 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
     {
         case BLE_ADV_EVT_FAST:
             err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING);
+            LED_Indication(BLE_GAP_EVT_DISCONNECTED);
             APP_ERROR_CHECK(err_code);
             break;
         case BLE_ADV_EVT_IDLE:
@@ -301,16 +392,18 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_CONNECTED:
-            nrf_gpio_pin_set(18);
-            nrf_gpio_pin_clear(17);
+            //nrf_gpio_pin_set(18);
+            //nrf_gpio_pin_clear(17);
+            LED_Indication(BLE_GAP_EVT_CONNECTED);
             err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
             APP_ERROR_CHECK(err_code);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
             break; // BLE_GAP_EVT_CONNECTED
 
         case BLE_GAP_EVT_DISCONNECTED:
-            nrf_gpio_pin_set(17);
-            nrf_gpio_pin_clear(18);
+            //nrf_gpio_pin_set(17);
+            //nrf_gpio_pin_clear(18);
+            LED_Indication(BLE_GAP_EVT_DISCONNECTED);
             err_code = bsp_indication_set(BSP_INDICATE_IDLE);
             APP_ERROR_CHECK(err_code);
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
@@ -607,11 +700,8 @@ static void buttons_leds_init(bool * p_erase_bonds)
 }
 
 
-static void leds_init(void)
-{
-    nrf_gpio_cfg_output(17);
-    nrf_gpio_cfg_output(18);
-}
+
+
 
 /**@brief Function for placing the application in low power state while waiting for events.
  */
@@ -635,6 +725,7 @@ int main(void)
 
     //buttons_leds_init(&erase_bonds);
     leds_init();
+    timers_init();
     
     ble_stack_init();
     gap_params_init();
@@ -653,8 +744,3 @@ int main(void)
         power_manage();
     }
 }
-
-
-/**
- * @}
- */
