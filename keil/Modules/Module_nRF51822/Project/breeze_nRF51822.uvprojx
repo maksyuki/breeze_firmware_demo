@@ -497,9 +497,24 @@
           <GroupName>nRF_Drivers</GroupName>
           <Files>
             <File>
+              <FileName>nrf_drv_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\drivers_nrf\adc\nrf_drv_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>nrf_drv_ppi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\drivers_nrf\ppi\nrf_drv_ppi.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_drv_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Components\drivers_nrf\uart\nrf_drv_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>nrf_drv_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\drivers_nrf\timer\nrf_drv_timer.c</FilePath>
             </File>
             <File>
               <FileName>nrf_drv_clock.c</FileName>
@@ -1126,9 +1141,24 @@
           <GroupName>nRF_Drivers</GroupName>
           <Files>
             <File>
+              <FileName>nrf_drv_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\drivers_nrf\adc\nrf_drv_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>nrf_drv_ppi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\drivers_nrf\ppi\nrf_drv_ppi.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf_drv_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Components\drivers_nrf\uart\nrf_drv_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>nrf_drv_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\drivers_nrf\timer\nrf_drv_timer.c</FilePath>
             </File>
             <File>
               <FileName>nrf_drv_clock.c</FileName>
