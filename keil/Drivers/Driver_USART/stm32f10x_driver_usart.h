@@ -34,7 +34,8 @@ myyerrol    2017.04.14    Format the module
 
 extern u8 usart_ring_buffer_rx[USART_BUFFER_SIZE];
 extern u8 usart_ring_buffer_tx[USART_BUFFER_SIZE];
-
+extern u8 usart_rx_completion_flag;
+    
 typedef struct
 {
     u8  *buffer;

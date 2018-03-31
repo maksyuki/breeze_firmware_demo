@@ -60,6 +60,7 @@ int fputc(int ch, FILE *f)
 
 u8 usart_ring_buffer_rx[USART_BUFFER_SIZE];
 u8 usart_ring_buffer_tx[USART_BUFFER_SIZE];
+u8 usart_rx_completion_flag = 0;
 
 USART_RingBuffer USART_RingBufferRxStructure;
 USART_RingBuffer USART_RingBufferTxStructure;
@@ -73,6 +74,16 @@ void USART_InitUSART(u32 baud_rate)
 {
     //USART_InitUSART1(baud_rate);
     UART1_init(72, baud_rate);
+    
+    USART_RingBufferRxStructure.index_rd = 0;
+    USART_RingBufferRxStructure.index_wt = 0;
+    USART_RingBufferRxStructure.mask     = USART_BUFFER_SIZE - 1;
+    USART_RingBufferRxStructure.buffer   = &usart_ring_buffer_rx[0];
+
+    USART_RingBufferTxStructure.index_rd = 0;
+    USART_RingBufferTxStructure.index_wt = 0;
+    USART_RingBufferTxStructure.mask     = USART_BUFFER_SIZE - 1;
+    USART_RingBufferTxStructure.buffer   = &usart_ring_buffer_tx[0];
 }
 
 void USART_InitUSART1(u32 baud_rate)
@@ -166,6 +177,9 @@ u16 USART_CountBuffer(USART_RingBuffer *ring_buffer)
 }
 
 
+
+
+//////////////////////////////////////////////////////
 void USART_PutChar(u8 ch)
 {
     USART_SendData(USART1, (u8)ch);
@@ -177,30 +191,8 @@ u8 USART_GetChar(void)
     while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET);
     return (u8)USART_ReceiveData(USART1);
 }
+//////////////////////////////////////////////////////
 
-
-
-
-
-
-
-
-/**************************实现函数********************************************
-*函数原型:		void U1NVIC_Configuration(void)
-*功　　能:		串口1中断配置
-输入参数：无
-输出参数：没有	
-*******************************************************************************/
-void UART1NVIC_Configuration(void)
-{
-    NVIC_InitTypeDef NVIC_InitStructure; 
-    /* Enable the USART1 Interrupt */
-    NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
-}
 
 
 /**************************实现函数********************************************
@@ -214,7 +206,7 @@ void UART1_init(u32 pclk2, u32 bound)
     float temp;
     u16 mantissa;
     u16 fraction;
-    temp = (float)(pclk2 * 1000000)/(bound * 16); //得到USARTDIV
+    temp = (float)(pclk2 * 1000000) / (bound * 16); //得到USARTDIV
     mantissa = temp;                             //得到整数部分
     fraction = (temp - mantissa) * 16; //得到小数部分
     mantissa <<= 4;
@@ -230,5 +222,5 @@ void UART1_init(u32 pclk2, u32 bound)
     USART1->CR1 |= 0X200C;       //1位停止,无校验位
     USART1->CR1 |= 1<<8;         //PE中断使能
 	USART1->CR1 |= 1<<5;         //接收缓冲区非空中断使能
-    UART1NVIC_Configuration();   //中断配置
+    NVIC_InitUSART();
 }
