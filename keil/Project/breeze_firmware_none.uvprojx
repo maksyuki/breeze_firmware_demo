@@ -373,7 +373,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER, STM32F10X_LD</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Libraries\CMSIS;..\Libraries\FWLib\inc;..\User;..\Drivers\Driver_IO;..\Drivers\Driver_IIC;..\Drivers\Driver_Timer;..\Drivers\Driver_NVIC;..\Drivers\Driver_Clock;..\Drivers\Driver_Delay;..\Drivers\Driver_USART;..\Modules\Module_LED;..\Modules\Module_Motor;..\Modules\Module_MS5611;..\Modules\Module_MPU6050;..\Algorithm\Algorithm_IMU;..\Algorithm\Algorithm_Filter</IncludePath>
+              <IncludePath>..\Libraries\CMSIS;..\Libraries\FWLib\inc;..\User;..\Drivers\Driver_IO;..\Drivers\Driver_IIC;..\Drivers\Driver_Timer;..\Drivers\Driver_NVIC;..\Drivers\Driver_Clock;..\Drivers\Driver_Flash;..\Drivers\Driver_Delay;..\Drivers\Driver_USART;..\Drivers\Driver_EEPROM;..\Modules\Module_LED;..\Modules\Module_Motor;..\Modules\Module_MS5611;..\Modules\Module_MPU6050;..\Modules\Module_CommLink;..\Algorithm\Algorithm_IMU;..\Algorithm\Algorithm_Filter;..\Algorithm\Algorithm_Flight;..\Algorithm\Algorithm_Control;..\Algorithm\Algorithm_Altitude</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -597,6 +597,11 @@
               <FilePath>..\Drivers\Driver_Timer\stm32f10x_driver_timer.c</FilePath>
             </File>
             <File>
+              <FileName>stm32f10x_driver_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\Driver_Flash\stm32f10x_driver_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32f10x_driver_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Drivers\Driver_USART\stm32f10x_driver_usart.c</FilePath>
@@ -610,6 +615,11 @@
               <FileName>stm32f10x_driver_delay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Drivers\Driver_Delay\stm32f10x_driver_delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_driver_eeprom.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\Driver_EEPROM\stm32f10x_driver_eeprom.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -637,6 +647,11 @@
               <FilePath>..\Modules\Module_MPU6050\stm32f10x_module_mpu6050.c</FilePath>
             </File>
             <File>
+              <FileName>stm32f10x_module_comm_link.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Modules\Module_CommLink\stm32f10x_module_comm_link.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32f10x_module_mpu6050_dmp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Modules\Module_MPU6050\stm32f10x_module_mpu6050_dmp.c</FilePath>
@@ -655,6 +670,21 @@
               <FileName>stm32f10x_algorithm_filter.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Algorithm\Algorithm_Filter\stm32f10x_algorithm_filter.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_algorithm_flight.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Algorithm\Algorithm_Flight\stm32f10x_algorithm_flight.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_algorithm_control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Algorithm\Algorithm_Control\stm32f10x_algorithm_control.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_algorithm_altitude.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Algorithm\Algorithm_Altitude\stm32f10x_algorithm_altitude.c</FilePath>
             </File>
           </Files>
         </Group>
