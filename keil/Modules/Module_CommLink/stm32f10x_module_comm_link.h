@@ -47,11 +47,15 @@ myyerrol    2017.04.28    Modify the module
 #define COMM_LINK_MSP_SET_YAW         2
 #define COMM_LINK_MSP_SET_PITCH       3
 #define COMM_LINK_MSP_SET_ROLL        4
-#define COMM_LINK_MSP_ARM_IT          5
-#define COMM_LINK_MSP_DISARM_IT       6
-#define COMM_LINK_MSP_SET_4CON        7
-#define COMM_LINK_MSP_SETOFF          8
-#define COMM_LINK_MSP_LAND_DOWN       9
+
+#define COMM_LINK_MSP_SET_4CON        5
+#define COMM_LINK_MSP_ARM_IT          6
+#define COMM_LINK_MSP_DISARM_IT       7
+#define COMM_LINK_MSP_ACC_CALI        8
+#define COMM_LINK_MSP_BATTERY         9
+
+//#define COMM_LINK_MSP_SETOFF          8
+//#define COMM_LINK_MSP_LAND_DOWN       9
 #define COMM_LINK_MSP_HOLD_ALT        10
 #define COMM_LINK_MSP_STOP_HOLD_ALT   11
 #define COMM_LINK_MSP_HEAD_FREE       12
@@ -59,7 +63,7 @@ myyerrol    2017.04.28    Modify the module
 #define COMM_LINK_MSP_POS_HOLD        14
 #define COMM_LINK_MSP_STOP_POS_HOLD   15
 #define COMM_LINK_MSP_FLY_STATE       16
-#define COMM_LINK_MSP_ACC_CALI        205
+
 
 #define COMM_LINK_APP_DB_YAW          70
 #define COMM_LINK_APP_DB_PR           50
@@ -141,11 +145,12 @@ typedef struct
     float thr;
 } CommLink_Data;
 
-extern u8   comm_link_mcu_state;
-extern u16  comm_link_rc_data[4];
-extern u32  comm_link_last_rc_timestamp;
-extern bool comm_link_fly_enable_flag;
-extern bool comm_link_pc_cmd_flag;
+extern u8    comm_link_mcu_state;
+extern u16   comm_link_rc_data[4];
+extern float comm_link_rc_bat;
+extern u32   comm_link_last_rc_timestamp;
+extern bool  comm_link_fly_enable_flag;
+extern bool  comm_link_pc_cmd_flag;
 
 extern CommLink_Data        CommLink_DataStructure;
 extern CommLink_DataPacketA CommLink_DataPacketAStructure;
@@ -159,8 +164,11 @@ extern void  CommLink_HandleCommand(void);
 extern void  CommLink_HandleDebugDataA(void);
 extern void  CommLink_HandleDebugDataB(void);
 extern void  CommLink_HandleDebugDataC(void);
-extern void  CommLink_ProcessDataFromNRF(void);
-extern void  CommLink_ReceiveDataFromNRF(void);
+extern void  CommLink_ProcessDataFromUART(void);
+static u8    TransUARTStringToChar(void);
+static u16   TransUARTStringToNumber(void);
+static float TransUARTStringToFloat(void);
+extern void  CommLink_ReceiveDataFromUART(void);
 extern void  CommLink_ReadPacket(u8 byte);
 extern void  CommLink_Test(void);
 extern void  CommLink_WriteBuffer(void);
