@@ -86,8 +86,14 @@ extern "C" {
 #define BSP_BUTTON_2   BUTTON_3
 #define BSP_BUTTON_3   BUTTON_4
 
+#ifdef TOSTM32
+#define RX_PIN_NUMBER  28
+#define TX_PIN_NUMBER  29
+#else
 #define RX_PIN_NUMBER  29
 #define TX_PIN_NUMBER  28
+#endif
+
 #define CTS_PIN_NUMBER 10
 #define RTS_PIN_NUMBER 8
 #define HWFC           true

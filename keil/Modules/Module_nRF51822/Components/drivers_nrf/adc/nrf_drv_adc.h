@@ -105,7 +105,7 @@ typedef struct
 #define NRF_DRV_ADC_DEFAULT_CHANNEL(analog_input)          \
  {{{                                                       \
     .resolution = NRF_ADC_CONFIG_RES_10BIT,                \
-    .input      = NRF_ADC_CONFIG_SCALING_INPUT_FULL_SCALE, \
+    .input      = NRF_ADC_CONFIG_SCALING_INPUT_ONE_THIRD, \
     .reference  = NRF_ADC_CONFIG_REF_VBG,                  \
     .ain        = (analog_input)                           \
  }}, NULL}

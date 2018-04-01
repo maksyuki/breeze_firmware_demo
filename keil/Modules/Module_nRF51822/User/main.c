@@ -53,6 +53,9 @@
 #include <string.h>
 #include "nordic_common.h"
 #include "nrf.h"
+#include "nrf_drv_timer.h"
+#include "nrf_drv_ppi.h"
+#include "nrf_drv_adc.h"
 #include "ble_hci.h"
 #include "ble_advdata.h"
 #include "ble_advertising.h"
@@ -151,6 +154,238 @@ static void gap_params_init(void)
     APP_ERROR_CHECK(err_code);
 }
 
+//user code==========================================
+//===================================================
+static void nrf_delay_ms(uint32_t volatile number_of_ms)
+{
+    int i;
+	   while(number_of_ms != 0)
+    {
+        number_of_ms--;
+        while(i<1000)
+				{
+          ++i;
+        }
+        i=0;
+    }
+}
+
+
+// Power managment pins
+
+#define PM_GPIO_SYSOFF          30
+#define PM_GPIO_EN1             24
+#define PM_GPIO_EN2             25
+#define PM_GPIO_IN_CHG          22
+#define PM_GPIO_IN_PGOOD        23
+
+APP_TIMER_DEF(LED1_toggle_timer_id);
+#define CHARGED_LED_OFF_INTERVAL 1800
+#define CHARGED_LED_ON_INTERVAL  200
+
+typedef enum
+{
+    charge100mA,
+    charge500mA,
+    chargeMax,
+} BatteryChargeMode;
+
+typedef enum
+{
+    battery,
+    charging,
+    charged,
+    lowPower,
+    shutDown,
+} BatteryChargeStates;
+
+static void battery_managment_init(void)
+{
+    // Configure PM PGOOD pin (Power good)
+    NRF_GPIO->PIN_CNF[PM_GPIO_IN_PGOOD] = 0;     // 输入，不上下拉，标准驱动0、1
+    // Configure PM CHG pin (Charge)
+    NRF_GPIO->PIN_CNF[PM_GPIO_IN_CHG]   = 3<<2;  // 输入，上拉，标准驱动0、1
+    // Configure PM EN2 pin
+    NRF_GPIO->PIN_CNF[PM_GPIO_EN2]      = 0x301; // 输出，高驱动0，高驱动1，不上下拉
+	// Configure PM EN1 pin
+    NRF_GPIO->PIN_CNF[PM_GPIO_EN1]      = 0x301; // 输出，高驱动0，高驱动1，不上下拉
+    // Configure PM SYSOFF pin
+    NRF_GPIO->PIN_CNF[PM_GPIO_SYSOFF]   = 0x301; // 输出，高驱动0，高驱动1，不上下拉
+}
+
+static void battery_setChargeMode(BatteryChargeMode chgMode)
+{
+    switch (chgMode)
+    {
+        case charge100mA:
+            nrf_gpio_pin_clear(PM_GPIO_EN1);
+            nrf_gpio_pin_clear(PM_GPIO_EN2);
+            break;
+        case charge500mA:
+            nrf_gpio_pin_set(PM_GPIO_EN1);
+            nrf_gpio_pin_clear(PM_GPIO_EN2);
+            break;
+        case chargeMax:
+            nrf_gpio_pin_clear(PM_GPIO_EN1);
+            nrf_gpio_pin_set(PM_GPIO_EN2);
+            break;
+    }
+}
+
+static BatteryChargeStates Battery_updateChargeState(void)
+{
+    uint32_t next_delay = 0;
+    BatteryChargeStates m_battery_chargestate;
+    bool isCharging = !nrf_gpio_pin_read(PM_GPIO_IN_CHG);
+    bool isPgood    = !nrf_gpio_pin_read(PM_GPIO_IN_PGOOD);
+
+    if (isPgood && !isCharging) //充电完成
+    {
+        m_battery_chargestate = charged;
+        bool pin_set = nrf_gpio_pin_out_read(18) ? true: false;
+
+        if (pin_set)
+        {
+            nrf_gpio_pin_clear(18);
+            next_delay = CHARGED_LED_OFF_INTERVAL;
+        }
+        else
+        {
+            nrf_gpio_pin_set(18);
+            next_delay = CHARGED_LED_ON_INTERVAL;
+        }
+        app_timer_start(LED1_toggle_timer_id, APP_TIMER_TICKS(next_delay, APP_TIMER_PRESCALER), NULL);
+    }
+    else if (isPgood && isCharging) //正在充电
+    {
+        m_battery_chargestate = charging;
+        nrf_gpio_pin_set(18); 
+    }
+    else if (!isPgood && !isCharging) //没插USB充电线
+    {
+        m_battery_chargestate = lowPower;
+        nrf_gpio_pin_clear(18); 
+    }
+    else
+    {
+        m_battery_chargestate = battery;
+        nrf_gpio_pin_clear(18);
+    }
+    return m_battery_chargestate;
+}
+
+static void battery_poweroff(void)
+{
+    nrf_gpio_pin_clear(PM_GPIO_SYSOFF);
+    nrf_delay_ms(100);
+    nrf_gpio_pin_set(PM_GPIO_SYSOFF);
+    nrf_delay_ms(100);
+    nrf_gpio_pin_clear(PM_GPIO_SYSOFF);
+}
+
+static void battery_timer_handler(void * p_context)
+{
+    UNUSED_PARAMETER(p_context);
+    Battery_updateChargeState();
+}
+
+#define CHARGESTATE_SAMPLE_RATE 1000 //1000ms
+
+static const nrf_drv_timer_t m_timer_battery = NRF_DRV_TIMER_INSTANCE(1);
+
+static void battery_timeout_handler(nrf_timer_event_t event_type, void* p_context)
+{
+    UNUSED_PARAMETER(p_context);
+    Battery_updateChargeState();
+}
+    
+static void timer1_init(void)
+{
+    ret_code_t err_code;
+    nrf_drv_timer_config_t timer_cfg = NRF_DRV_TIMER_DEFAULT_CONFIG;
+    err_code = nrf_drv_timer_init(&m_timer_battery, &timer_cfg, battery_timeout_handler);
+
+    APP_ERROR_CHECK(err_code);
+    uint32_t time_ticks = nrf_drv_timer_ms_to_ticks(&m_timer_battery, CHARGESTATE_SAMPLE_RATE);
+    nrf_drv_timer_extended_compare(&m_timer_battery, NRF_TIMER_CC_CHANNEL0,
+    time_ticks, NRF_TIMER_SHORT_COMPARE0_CLEAR_MASK, true);
+    nrf_drv_timer_enable(&m_timer_battery);
+}
+
+
+
+
+#define ADC_BUFFER_SIZE 1
+#define ADC_SAMPLE_RATE 1000 // 1000ms
+
+static nrf_adc_value_t adc_buffer[ADC_BUFFER_SIZE];
+
+static nrf_drv_adc_channel_t m_channel_config =
+NRF_DRV_ADC_DEFAULT_CHANNEL(NRF_ADC_CONFIG_INPUT_2);
+
+static nrf_ppi_channel_t     m_ppi_channel;
+static const nrf_drv_timer_t m_timer = NRF_DRV_TIMER_INSTANCE(2);
+
+static void adc_sampling_timeout_handler(nrf_timer_event_t event_type, void*
+p_context)
+{}
+    
+static void timer2_init(void)
+{
+    ret_code_t err_code;
+    nrf_drv_timer_config_t timer_cfg = NRF_DRV_TIMER_DEFAULT_CONFIG;
+    err_code = nrf_drv_timer_init(&m_timer, &timer_cfg,
+    adc_sampling_timeout_handler);
+    
+    APP_ERROR_CHECK(err_code);
+    uint32_t time_ticks = nrf_drv_timer_ms_to_ticks(&m_timer, ADC_SAMPLE_RATE);
+    nrf_drv_timer_extended_compare(&m_timer, NRF_TIMER_CC_CHANNEL0,
+    time_ticks, NRF_TIMER_SHORT_COMPARE0_CLEAR_MASK, true);
+    nrf_drv_timer_enable(&m_timer);
+}
+
+static void adc_ppi_config(void)
+{
+    ret_code_t err_code;
+    err_code = nrf_drv_ppi_init();
+    APP_ERROR_CHECK(err_code);
+    err_code = nrf_drv_ppi_channel_alloc(&m_ppi_channel);
+    APP_ERROR_CHECK(err_code);
+    
+    err_code = nrf_drv_ppi_channel_assign(m_ppi_channel,
+    nrf_drv_timer_compare_event_address_get(&m_timer, NRF_TIMER_CC_CHANNEL0),
+    nrf_drv_adc_start_task_get());
+    APP_ERROR_CHECK(err_code);
+    
+    err_code = nrf_drv_ppi_channel_enable(m_ppi_channel);
+    APP_ERROR_CHECK(err_code);
+}
+
+static void adc_event_handler(nrf_drv_adc_evt_t const* p_event)
+{
+    if (p_event->type == NRF_DRV_ADC_EVT_DONE)
+    {
+        for (uint32_t i = 0; i < p_event->data.done.size; i++)
+        {
+            printf("V:%d\r\n", p_event->data.done.p_buffer[i]);
+        }
+        APP_ERROR_CHECK(nrf_drv_adc_buffer_convert(adc_buffer, ADC_BUFFER_SIZE));
+    }
+}
+
+static void adc_config(void)
+{
+    ret_code_t ret_code;
+    nrf_drv_adc_config_t config = NRF_DRV_ADC_DEFAULT_CONFIG;
+    ret_code = nrf_drv_adc_init(&config, adc_event_handler);
+    APP_ERROR_CHECK(ret_code);
+    nrf_drv_adc_channel_enable(&m_channel_config);
+}
+
+//user code==========================================
+//===================================================
+
+
 
 /**@brief Function for handling the data from the Nordic UART Service.
  *
@@ -166,6 +401,7 @@ static void nus_data_handler(ble_nus_t * p_nus, uint8_t * p_data, uint16_t lengt
 {
     for (uint32_t i = 0; i < length; i++)
     {
+        //if (p_data[i] == 'm') battery_poweroff(); //for debugging!!!!!!
         while (app_uart_put(p_data[i]) != NRF_SUCCESS);
     }
     while (app_uart_put('\r') != NRF_SUCCESS);
@@ -248,8 +484,10 @@ static void conn_params_init(void)
 
 
 
-//=========================User code==========================
+//=========================user code==========================
 //============================================================
+
+
 static void leds_init(void)
 {
     nrf_gpio_cfg_output(17);
@@ -298,6 +536,8 @@ static void timers_init(void)
        uint32_t err_code;
        err_code = app_timer_create(&LED0_toggle_timer_id, APP_TIMER_MODE_SINGLE_SHOT, leds_timer_handler);
        APP_ERROR_CHECK(err_code);
+        err_code = app_timer_create(&LED1_toggle_timer_id, APP_TIMER_MODE_SINGLE_SHOT, battery_timer_handler);
+       APP_ERROR_CHECK(err_code);
 }
 
 //Use for toggling the LED0(pin 17)
@@ -332,7 +572,7 @@ static void LED_Indication(enum BLE_GAP_EVTS led_state)
     }
 }
 //============================================================
-//=========================User code==========================
+//=========================user code==========================
 
 
 /**@brief Function for putting the chip into sleep mode.
@@ -701,8 +941,6 @@ static void buttons_leds_init(bool * p_erase_bonds)
 
 
 
-
-
 /**@brief Function for placing the application in low power state while waiting for events.
  */
 static void power_manage(void)
@@ -716,6 +954,7 @@ static void power_manage(void)
  */
 int main(void)
 {
+    uint8_t cnt = 0;
     uint32_t err_code;
     bool erase_bonds;
 
@@ -724,8 +963,11 @@ int main(void)
     uart_init();
 
     //buttons_leds_init(&erase_bonds);
+    
     leds_init();
     timers_init();
+    battery_managment_init();
+    battery_setChargeMode(chargeMax);
     
     ble_stack_init();
     gap_params_init();
@@ -736,11 +978,31 @@ int main(void)
     printf("\r\nUART Start!\r\n");
     err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
     APP_ERROR_CHECK(err_code);
+    
     nrf_gpio_pin_set(17);
-
     // Enter main loop.
+
+    //timer2_init();    // 初始化timer2
+    //adc_ppi_config(); // 配置PPI
+    //adc_config();	  // 配置ADC
+    //APP_ERROR_CHECK(nrf_drv_adc_buffer_convert(adc_buffer, ADC_BUFFER_SIZE));
+    
+    //timer1_init();
+    
+    battery_poweroff();
+    while(Battery_updateChargeState() != charged) ;
+    
+//    while(cnt <= 16)
+//    {
+//        nrf_delay_ms(500);
+//        nrf_gpio_pin_toggle(18);
+//        cnt++;
+//    }
+//    
+//    battery_poweroff();
+    
     for (;;)
     {
-        power_manage();
+        //power_manage();
     }
 }
