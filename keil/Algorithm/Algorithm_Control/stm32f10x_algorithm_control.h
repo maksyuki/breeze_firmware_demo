@@ -31,28 +31,29 @@ myyerrol    2017.04.30    Format the module
 
 #include <stdbool.h>
 #include <math.h>
+#include "config.h"
 #include "stm32f10x.h"
 
 #define CONTROL_THRUST_SLOW      200
 // The maximum angle of inclination.
 #define CONTROL_ANGLE_MAX        40.0
-#define CONTROL_YAW_RATE_MAX     180.0f / M_PI
+#define CONTROL_YAW_RATE_MAX     180.0F / M_PI
 // Set fixed height.
-#define CONTROL_LAND_SPEED       1.2f
-#define CONTROL_ALT_VEL_MAX      4.0f
+#define CONTROL_LAND_SPEED       1.2F
+#define CONTROL_ALT_VEL_MAX      4.0F
 #define CONTROL_YAW_CORRECT      1
 
 #define CONTROL_STATE_CLIMB_RATE 0
 #define CONTROL_STATE_MANUAL     1
 #define CONTROL_STATE_LANDING    2
 
-#define CONTROL_ALT_FEED_FORWARD 0.5f
-#define CONTROL_THRUST_MAX       1.0f
+#define CONTROL_ALT_FEED_FORWARD 0.5F
+#define CONTROL_THRUST_MAX       1.0F
 // Limited height is 3.5m.
-#define CONTROL_ALT_LIMIT        2.0f
+#define CONTROL_ALT_LIMIT        2.0F
 #define CONTROL_TILT_MAX         (CONTROL_ANGLE_MAX * M_PI / 180.0)
 // Z deadband.
-#define CONTROL_ALT_CTRL_Z_DB    1.0f
+#define CONTROL_ALT_CTRL_Z_DB    1.0F
 
 // PID infromation.
 // kp: proportional's factor.

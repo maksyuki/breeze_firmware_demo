@@ -22,12 +22,13 @@ myyerrol    2017.04.29    Format the module
 
 #include <math.h>
 #include "stm32f10x_driver_delay.h"
-#include "stm32f10x_module_comm_link.h"
 #include "stm32f10x_module_motor.h"
-#include "stm32f10x_algorithm_altitude.h"
-#include "stm32f10x_algorithm_control.h"
-#include "stm32f10x_algorithm_flight.h"
+#include "stm32f10x_module_comm_link.h"
 #include "stm32f10x_algorithm_imu.h"
+#include "stm32f10x_algorithm_flight.h"
+#include "stm32f10x_algorithm_control.h"
+#include "stm32f10x_algorithm_altitude.h"
+
 
 bool flight_lost_rc_flag;
 

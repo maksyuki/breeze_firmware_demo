@@ -26,8 +26,8 @@ myyerrol    2017.04.30    Modify the module
 
 #include "stm32f10x_driver_delay.h"
 #include "stm32f10x_module_ms5611.h"
-#include "stm32f10x_algorithm_altitude.h"
 #include "stm32f10x_algorithm_imu.h"
+#include "stm32f10x_algorithm_altitude.h"
 
 bool altitude_acc_update_flag = false;
 Altitude_NEDFrame Altitude_NEDFrameStructure;

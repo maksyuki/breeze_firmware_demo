@@ -28,12 +28,12 @@ myyerrol    2017.04.30    Format the module
 
 #include "stm32f10x_it.h"
 #include "stm32f10x_driver_delay.h"
-#include "stm32f10x_module_battery.h"
-#include "stm32f10x_module_comm_link.h"
+//#include "stm32f10x_module_battery.h"
 #include "stm32f10x_module_motor.h"
-#include "stm32f10x_algorithm_altitude.h"
-#include "stm32f10x_algorithm_control.h"
+#include "stm32f10x_module_comm_link.h"
 #include "stm32f10x_algorithm_imu.h"
+#include "stm32f10x_algorithm_control.h"
+#include "stm32f10x_algorithm_altitude.h"
 
 u8    control_altitude_mode;
 float control_alt_land;
@@ -95,10 +95,10 @@ void Control_CallPIDAngle(void)
     {
 #if CONTROL_YAW_CORRECT
         float diff_rad      = -(IMU_TableStructure.yaw_ang - head_yaw_angle) *
-            M_PI / 180.0f;
+            M_PI / 180.0F;
 #else
         float diff_rad      =  (IMU_TableStructure.yaw_ang - head_yaw_angle) *
-            M_PI / 180.0f;
+            M_PI / 180.0F;
 #endif
         float diff_cos      = cosf(diff_rad);
         float diff_sin      = sinf(diff_rad);
@@ -131,15 +131,15 @@ void Control_CallPIDAngleRate(void)
     // Note: original pid parameters are in AD value, need to convert.
     Control_CallPIDPosition(&Control_PIDPitchAngleRate,
                             Control_PIDPitchAngle.output,
-                            IMU_TableStructure.gyr[IMU_PITCH] * 180.0f / M_PI,
+                            IMU_TableStructure.gyr[IMU_PITCH] * 180.0F / M_PI,
                             delta_time);
     Control_CallPIDPosition(&Control_PIDRollAngleRate,
                             Control_PIDRollAngle.output,
-                            IMU_TableStructure.gyr[IMU_ROLL]  * 180.0f / M_PI,
+                            IMU_TableStructure.gyr[IMU_ROLL]  * 180.0F / M_PI,
                             delta_time);
     Control_CallPIDPosition(&Control_PIDYawAngleRate,
                             yaw_angle_rate,
-                            IMU_TableStructure.gyr[IMU_YAW]   * 180.0f / M_PI,
+                            IMU_TableStructure.gyr[IMU_YAW]   * 180.0F / M_PI,
                             delta_time);
 
     output_pitch = Control_PIDPitchAngleRate.output;
@@ -151,7 +151,7 @@ void Control_CallPIDPosition(Control_PID *pid, float target, float measure,
                              s32 delta_time)
 {
     float temp_integral   = 0;
-    float temp_delta_time = delta_time / 1000000.0;
+    float temp_delta_time = delta_time / 1000000.0F;
 
     pid->error     = target - measure;
     pid->error_der = (pid->error - pid->error_pre) / temp_delta_time;
@@ -216,7 +216,7 @@ void Control_SetAltitude(void)
     else
     {
         timestamp_now = Delay_GetRuntimeUs();
-        delta_time    = (timestamp_now - timestamp_pre) / 1000000.0f;
+        delta_time    = (timestamp_now - timestamp_pre) / 1000000.0F;
         timestamp_pre = timestamp_now;
     }
 
@@ -232,11 +232,11 @@ void Control_SetAltitude(void)
     alt = -Altitude_NEDFrameStructure.pos_z;
 
     // Get desired rate of thrust.
-    thrust_rate             = CommLink_DataStructure.thr / 1000.0f;
+    thrust_rate             = CommLink_DataStructure.thr / 1000.0F;
     // Scale to -1~1 in NED frame.
     split_power_z_move_rate = -CommLink_CutDBScaleToLinear(
-        thrust_rate - 0.5f,
-        0.5f,
+        thrust_rate - 0.5F,
+        0.5F,
         CONTROL_ALT_CTRL_Z_DB);
     // Scale to velocity max.
     split_power_z_move_rate = split_power_z_move_rate * CONTROL_ALT_VEL_MAX;
@@ -248,7 +248,7 @@ void Control_SetAltitude(void)
 
     // Limit altitude's setpoint.
     alt_split_power_offset_max = CONTROL_ALT_VEL_MAX / Control_PIDAlt.kp *
-        2.0f;
+        2.0F;
     alt_split_power_offset     = alt_split_power - alt;
 
     if (alt_split_power_offset > alt_split_power_offset_max)
@@ -284,7 +284,7 @@ void Control_SetAltitude(void)
     // Get estimated value for hover.
     if (control_integral_reset_flag)
     {
-        control_thrust_z_integral   = Control_EstimateThrustRefHover();
+        //control_thrust_z_integral   = Control_EstimateThrustRefHover();
         control_integral_reset_flag = false;
     }
 
@@ -298,7 +298,7 @@ void Control_SetAltitude(void)
         val_z_error_der * Control_PIDAltVel.kd + control_thrust_z_integral;
 
     // Limit thrust's min.
-    thrust_min = Control_EstimateThrustRefMin();
+    //thrust_min = Control_EstimateThrustRefMin();
 
     if (control_altitude_mode != CONTROL_STATE_LANDING)
     {
@@ -450,66 +450,66 @@ void Control_SetMotorPWM(void)
     }
 }
 
-// Estimate thrust's min value according to battery's voltage.
-float Control_EstimateThrustRefMin(void)
-{
-    float min_thrust_ref = -0.55f;
+//// Estimate thrust's min value according to battery's voltage.
+//float Control_EstimateThrustRefMin(void)
+//{
+//    float min_thrust_ref = -0.55f;
 
-    // Check battery voltage.
-    Battery_InformationStructure.voltage_ad        = Battery_GetAD();
-    Battery_InformationStructure.voltage_calculate =
-        Battery_InformationStructure.voltage_factor *
-       (Battery_InformationStructure.voltage_ad / 4096.0) *
-        Battery_InformationStructure.voltage_ad_ref;
+//    // Check battery voltage.
+//    Battery_InformationStructure.voltage_ad        = Battery_GetAD();
+//    Battery_InformationStructure.voltage_calculate =
+//        Battery_InformationStructure.voltage_factor *
+//       (Battery_InformationStructure.voltage_ad / 4096.0) *
+//        Battery_InformationStructure.voltage_ad_ref;
 
-    if (Battery_InformationStructure.voltage_calculate > 4.05)
-    {
-        min_thrust_ref = -0.30f;
-    }
-    else if (Battery_InformationStructure.voltage_calculate > 3.90)
-    {
-        min_thrust_ref = -0.40f;
-    }
-    else
-    {
-        min_thrust_ref = -0.55f;
-    }
+//    if (Battery_InformationStructure.voltage_calculate > 4.05)
+//    {
+//        min_thrust_ref = -0.30f;
+//    }
+//    else if (Battery_InformationStructure.voltage_calculate > 3.90)
+//    {
+//        min_thrust_ref = -0.40f;
+//    }
+//    else
+//    {
+//        min_thrust_ref = -0.55f;
+//    }
 
-    return min_thrust_ref;
-}
+//    return min_thrust_ref;
+//}
 
-// Estimate thrust's value for hover according to battery's voltage.
-float Control_EstimateThrustRefHover(void)
-{
-    float hover_thrust_ref = -0.55f;
+//// Estimate thrust's value for hover according to battery's voltage.
+//float Control_EstimateThrustRefHover(void)
+//{
+//    float hover_thrust_ref = -0.55f;
 
-    // Check battery voltage.
-    Battery_InformationStructure.voltage_ad        = Battery_GetAD();
-    Battery_InformationStructure.voltage_calculate =
-        Battery_InformationStructure.voltage_factor *
-       (Battery_InformationStructure.voltage_ad / 4096.0) *
-        Battery_InformationStructure.voltage_ad_ref;
+//    // Check battery voltage.
+//    Battery_InformationStructure.voltage_ad        = Battery_GetAD();
+//    Battery_InformationStructure.voltage_calculate =
+//        Battery_InformationStructure.voltage_factor *
+//       (Battery_InformationStructure.voltage_ad / 4096.0) *
+//        Battery_InformationStructure.voltage_ad_ref;
 
-    if (Battery_InformationStructure.voltage_calculate > 4.05)
-    {
-        hover_thrust_ref = -0.25f;
-    }
-    else if (Battery_InformationStructure.voltage_calculate > 3.90)
-    {
-        hover_thrust_ref = -0.40f;
-    }
-    else if (Battery_InformationStructure.voltage_calculate > 3.80)
-    {
-        hover_thrust_ref = -0.45f;
-    }
-    else if (Battery_InformationStructure.voltage_calculate > 3.70)
-    {
-        hover_thrust_ref = -0.50f;
-    }
-    else
-    {
-        hover_thrust_ref = -0.55f;
-    }
+//    if (Battery_InformationStructure.voltage_calculate > 4.05)
+//    {
+//        hover_thrust_ref = -0.25f;
+//    }
+//    else if (Battery_InformationStructure.voltage_calculate > 3.90)
+//    {
+//        hover_thrust_ref = -0.40f;
+//    }
+//    else if (Battery_InformationStructure.voltage_calculate > 3.80)
+//    {
+//        hover_thrust_ref = -0.45f;
+//    }
+//    else if (Battery_InformationStructure.voltage_calculate > 3.70)
+//    {
+//        hover_thrust_ref = -0.50f;
+//    }
+//    else
+//    {
+//        hover_thrust_ref = -0.55f;
+//    }
 
-    return hover_thrust_ref;
-}
+//    return hover_thrust_ref;
+//}
