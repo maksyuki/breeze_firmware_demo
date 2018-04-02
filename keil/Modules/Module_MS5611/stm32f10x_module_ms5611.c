@@ -32,6 +32,7 @@ myyerrol    2017.04.24    Format the module
 *******************************************************************************/
 
 #include <math.h>
+#include <stdio.h>
 #include "config.h"
 #include "stm32f10x_it.h"
 #include "stm32f10x_driver_delay.h"
@@ -227,6 +228,7 @@ void MS5611_UpdateData(void)
             conversion_delay_us = delay_us_table[MS5611_OSR_TEMP];
             start_convert_timestamp = Delay_GetRuntimeUs();
             current_state = MS5611_STATE_CONVERTING_TEMP;
+            printf("state_1\r\n");
             break;
         }
         case MS5611_STATE_CONVERTING_TEMP:
@@ -236,6 +238,7 @@ void MS5611_UpdateData(void)
             {
                 MS5611_GetTemperature();
                 current_state = MS5611_STATE_START_CONVERT_PRES;
+                printf("state_2\r\n");
             }
             break;
         }
@@ -245,6 +248,7 @@ void MS5611_UpdateData(void)
             conversion_delay_us = delay_us_table[MS5611_OSR_PRES];
             start_convert_timestamp = Delay_GetRuntimeUs();
             current_state = MS5611_STATE_CONVERTING_PRES;
+            printf("state_3\r\n");
             break;
         }
         case MS5611_STATE_CONVERTING_PRES:
@@ -255,12 +259,14 @@ void MS5611_UpdateData(void)
                 MS5611_GetPressure();
                 ms5611_altitude_update_flag = true;
                 current_state = MS5611_STATE_START_CONVERT_TEMP;
+                printf("state_4\r\n");
             }
             break;
         }
         default:
         {
             current_state = MS5611_STATE_START_CONVERT_TEMP;
+            printf("state_5\r\n");
             break;
         }
     }
@@ -345,7 +351,11 @@ float MS5611_GetAltitude(void)
     temp     = 1 - pow((ms5611_pressure / pressure_offset), 0.1903);
     altitude = 4433000.0 * temp * 0.01F;
     altitude = altitude + altitude_offset ;
-
+    
+    printf("ms5611_pressure: %.6f\r\n", ms5611_pressure);
+    printf("pressure_offset: %.6f\r\n", pressure_offset);
+    printf("altitude_offset: %.6f\r\n", altitude_offset);
+    
     return altitude;
 }
 
