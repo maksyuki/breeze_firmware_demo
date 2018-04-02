@@ -9,9 +9,15 @@
 
 
 //user code=================================================
-//#ifndef TOSTM32
-//#define TOSTM32
-//#endif
+#ifndef TOSTM32_ENABLED
+#define TOSTM32_ENABLED 1
+#endif
+
+#if TOSTM32_ENABLED
+#ifndef TOSTM32
+#define TOSTM32
+#endif
+#endif
 //user code=================================================
 
 
@@ -2316,7 +2322,7 @@
  
 
 #ifndef TIMER1_ENABLED
-#define TIMER1_ENABLED 0
+#define TIMER1_ENABLED 1
 #endif
 
 // <q> TIMER2_ENABLED  - Enable TIMER2 instance

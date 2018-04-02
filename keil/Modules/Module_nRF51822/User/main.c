@@ -210,7 +210,9 @@ static void battery_managment_init(void)
 	// Configure PM EN1 pin
     NRF_GPIO->PIN_CNF[PM_GPIO_EN1]      = 0x301; // 输出，高驱动0，高驱动1，不上下拉
     // Configure PM SYSOFF pin
-    NRF_GPIO->PIN_CNF[PM_GPIO_SYSOFF]   = 0x301; // 输出，高驱动0，高驱动1，不上下拉
+//    NRF_GPIO->PIN_CNF[PM_GPIO_SYSOFF]   = 0x301; // 输出，高驱动0，高驱动1，不上下拉
+    
+    NRF_GPIO->PIN_CNF[PM_GPIO_SYSOFF]   = 0x303; // 输出，不上下拉
 }
 
 static void battery_setChargeMode(BatteryChargeMode chgMode)
@@ -276,11 +278,14 @@ static BatteryChargeStates Battery_updateChargeState(void)
 
 static void battery_poweroff(void)
 {
-    nrf_gpio_pin_clear(PM_GPIO_SYSOFF);
-    nrf_delay_ms(100);
-    nrf_gpio_pin_set(PM_GPIO_SYSOFF);
-    nrf_delay_ms(100);
-    nrf_gpio_pin_clear(PM_GPIO_SYSOFF);
+    //nrf_gpio_pin_clear(PM_GPIO_SYSOFF);
+    NRF_GPIO->OUTSET = 1 << 30;
+//    nrf_delay_ms(1000);
+//    nrf_gpio_pin_set(18);
+    //nrf_gpio_pin_set(PM_GPIO_SYSOFF);
+//    NRF_GPIO->OUTCLR = 1 << 30;
+//    nrf_delay_ms(1000);
+//    nrf_gpio_pin_clear(18);
 }
 
 static void battery_timer_handler(void * p_context)
@@ -401,7 +406,7 @@ static void nus_data_handler(ble_nus_t * p_nus, uint8_t * p_data, uint16_t lengt
 {
     for (uint32_t i = 0; i < length; i++)
     {
-        //if (p_data[i] == 'm') battery_poweroff(); //for debugging!!!!!!
+        if (p_data[i] == 'M') battery_poweroff(); //for debugging!!!!!!
         while (app_uart_put(p_data[i]) != NRF_SUCCESS);
     }
     while (app_uart_put('\r') != NRF_SUCCESS);
@@ -959,7 +964,7 @@ int main(void)
     bool erase_bonds;
 
     // Initialize.
-    APP_TIMER_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, false);
+//    APP_TIMER_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, false);
     uart_init();
 
     //buttons_leds_init(&erase_bonds);
@@ -982,24 +987,31 @@ int main(void)
     nrf_gpio_pin_set(17);
     // Enter main loop.
 
-    //timer2_init();    // 初始化timer2
-    //adc_ppi_config(); // 配置PPI
-    //adc_config();	  // 配置ADC
-    //APP_ERROR_CHECK(nrf_drv_adc_buffer_convert(adc_buffer, ADC_BUFFER_SIZE));
+//    timer2_init();    // 初始化timer2
+//    adc_ppi_config(); // 配置PPI
+//    adc_config();	  // 配置ADC
+//    APP_ERROR_CHECK(nrf_drv_adc_buffer_convert(adc_buffer, ADC_BUFFER_SIZE));
     
-    //timer1_init();
+//    timer1_init();
     
-    battery_poweroff();
-    while(Battery_updateChargeState() != charged) ;
+//    while(1)
+//    {
+//        battery_poweroff();
+//    }
+    
+//    while (Battery_updateChargeState() != charged) ;
     
 //    while(cnt <= 16)
 //    {
-//        nrf_delay_ms(500);
+//        nrf_delay_ms(1000);
 //        nrf_gpio_pin_toggle(18);
 //        cnt++;
 //    }
-//    
-//    battery_poweroff();
+    
+    while (1)
+    {
+        battery_poweroff();
+    }
     
     for (;;)
     {
