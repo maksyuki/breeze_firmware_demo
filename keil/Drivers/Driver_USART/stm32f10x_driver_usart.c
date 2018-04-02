@@ -61,6 +61,7 @@ int fputc(int ch, FILE *f)
 u8 usart_ring_buffer_rx[USART_BUFFER_SIZE];
 u8 usart_ring_buffer_tx[USART_BUFFER_SIZE];
 u8 usart_rx_completion_flag = 0;
+u8 usart_rx_start_at_first  = 0;
 
 USART_RingBuffer USART_RingBufferRxStructure;
 USART_RingBuffer USART_RingBufferTxStructure;
