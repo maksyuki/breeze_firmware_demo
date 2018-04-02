@@ -46,8 +46,9 @@ myyerrol    2017.04.28    Modify the module
 #define COMM_LINK_MSP_SET_THRO        1
 #define COMM_LINK_MSP_SET_YAW         2
 #define COMM_LINK_MSP_SET_PITCH       3
-#define COMM_LINK_MSP_SET_ROLL        4
+//#define COMM_LINK_MSP_SET_ROLL        4
 
+#define COMM_LINK_MSP_POWER_OFF       4
 #define COMM_LINK_MSP_SET_4CON        5
 #define COMM_LINK_MSP_ARM_IT          6
 #define COMM_LINK_MSP_DISARM_IT       7

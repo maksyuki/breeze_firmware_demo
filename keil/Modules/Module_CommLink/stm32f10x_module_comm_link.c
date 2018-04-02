@@ -38,9 +38,10 @@ myyerrol    2017.04.28    Modify the module
 #include "stm32f10x_driver_eeprom.h"
 #include "stm32f10x_driver_usart.h"
 //#include "stm32f10x_module_battery.h"
-#include "stm32f10x_module_comm_link.h"
 #include "stm32f10x_module_led.h"
+#include "stm32f10x_module_motor.h"
 #include "stm32f10x_module_ms5611.h"
+#include "stm32f10x_module_comm_link.h"
 //#include "stm32f10x_module_nrf24l01.h"
 #include "stm32f10x_algorithm_altitude.h"
 #include "stm32f10x_algorithm_imu.h"
@@ -508,6 +509,22 @@ static float TransUARTStringToFloat(void)
     return tmpval;
 }
 
+
+static void POWER_off(void)
+{
+    u8 i;
+    Motor_SetPWM(0, 0, 0, 0);
+    for (i = 1; i <= 6; i++)
+        Delay_TimeMs(1000);
+
+    Motor_SetPWM(999, 999, 999, 999);
+
+    for (i = 1; i <= 2; i++)
+        Delay_TimeMs(1000);
+    
+    Motor_SetPWM(0, 0, 0, 0);
+}
+
 // if the `usart_rx_completion_flag` is true, this function will be called in `main` function
 void CommLink_ReceiveDataFromUART(void)
 {
@@ -531,6 +548,11 @@ void CommLink_ReceiveDataFromUART(void)
             case COMM_LINK_MSP_BATTERY:
             {
                 comm_link_rc_bat = TransUARTStringToFloat();
+                break;
+            }
+            case COMM_LINK_MSP_POWER_OFF:
+            {
+                POWER_off();
                 break;
             }
             case COMM_LINK_MSP_ARM_IT:
