@@ -74,7 +74,7 @@ void USART_ClearBuffer(USART_RingBuffer *ring_buffer)
 void USART_InitUSART(u32 baud_rate)
 {
     //USART_InitUSART1(baud_rate);
-    UART1_init(72, baud_rate);
+    UART1_init(64, baud_rate);
     
     USART_RingBufferRxStructure.index_rd = 0;
     USART_RingBufferRxStructure.index_wt = 0;

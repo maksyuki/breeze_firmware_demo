@@ -29,6 +29,7 @@ extern s8 clock_system;
 
 extern void Clock_DeInit(void);
 extern void Clock_Init(void);
+extern void SetSysClockTo64Mhz(void);
 extern s8   Clock_InitSystemClockHSI(u8 pll_multi);
 extern s8   Clock_InitSystemClockHSE(u8 pll_multi);
 
