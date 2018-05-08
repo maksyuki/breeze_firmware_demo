@@ -2,7 +2,7 @@
 THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE IT AND/OR MODIFY IT
 UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
 
-Copyright (C), 2016-2016, Team MicroDynamics <microdynamics@126.com>
+Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
 
 Filename:    stm32f10x_driver_clock.c
 Author:      myyerrol
@@ -12,9 +12,10 @@ Description: Implement the system clock function
 Others:      none
 Function List:
              1. void Clock_DeInit(void);
-             1. void Clock_Init(void);
-             2. s8   Clock_InitSystemClockHSI(u8 pll_multi);
-             3. s8   Clock_InitSystemClockHSE(u8 pll_multi);
+             2. void Clock_Init(void);
+             3. void SetSysClockTo64Mhz(void);
+             4. s8   Clock_InitSystemClockHSI(u8 pll_multi);
+             5. s8   Clock_InitSystemClockHSE(u8 pll_multi);
 History:
 <author>    <date>        <desc>
 myyerrol    2017.04.13    Modify the module
@@ -57,7 +58,7 @@ void Clock_Init(void)
     SetSysClockTo64Mhz();
 }
 
-// use th HSI to set the clock!!!
+// Use th HSI to set the clock!!! this fun is aslike set-clock fun in `system_stm32f10x.c`
 void SetSysClockTo64Mhz(void)
 {
     __IO uint32_t StartUpCounter = 0, HSEStatus = 0;
@@ -117,8 +118,8 @@ void SetSysClockTo64Mhz(void)
         while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != (uint32_t)0x08){}
     }
     else
-    { /* If HSE fails to start-up, the application will have wrong clock
-         configuration. User can add here some code to deal with this error */
+    {   /* If HSE fails to start-up, the application will have wrong clock
+           configuration. User can add here some code to deal with this error */
     }
 }
 

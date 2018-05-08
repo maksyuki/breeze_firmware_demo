@@ -2,7 +2,7 @@
 THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE IT AND/OR MODIFY IT
 UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
 
-Copyright (C), 2016-2016, Team MicroDynamics <microdynamics@126.com>
+Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
 
 Filename:    stm32f10x_driver_clock.h
 Author:      myyerrol
@@ -12,9 +12,10 @@ Description: Declare the system clock function
 Others:      none
 Function List:
              1. void Clock_DeInit(void);
-             1. void Clock_Init(void);
-             2. s8   Clock_InitSystemClockHSI(u8 pll_multi);
-             3. s8   Clock_InitSystemClockHSE(u8 pll_multi);
+             2. void Clock_Init(void);
+             3. void SetSysClockTo64Mhz(void);
+             4. s8   Clock_InitSystemClockHSI(u8 pll_multi);
+             5. s8   Clock_InitSystemClockHSE(u8 pll_multi);
 History:
 <author>    <date>        <desc>
 myyerrol    2017.04.13    Modify the module

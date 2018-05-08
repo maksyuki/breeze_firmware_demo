@@ -2,7 +2,7 @@
 THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE IT AND/OR MODIFY IT
 UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
 
-Copyright (C), 2016-2016, Team MicroDynamics <microdynamics@126.com>
+Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
 
 Filename:    stm32f10x_driver_nvic.h
 Author:      myyerrol
@@ -14,7 +14,7 @@ Function List:
              1. void NVIC_InitUSART(void);
              2. void NVIC_InitUSART1(void);
              3. void NVIC_InitTIM(void);
-             4. void NVIC_InitTIM3(void);
+             4. void NVIC_InitTIM1(void);
              5. void NVIC_InitTIM4(void);
 History:
 <author>    <date>        <desc>
@@ -29,7 +29,7 @@ myyerrol    2017.04.14    Modify the module
 extern void NVIC_InitUSART(void);
 extern void NVIC_InitUSART1(void);
 extern void NVIC_InitTIM(void);
-extern void NVIC_InitTIM3(void);
 extern void NVIC_InitTIM1(void);
+extern void NVIC_InitTIM4(void);
 
 #endif
