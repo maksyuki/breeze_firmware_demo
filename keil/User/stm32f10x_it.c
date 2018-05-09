@@ -11,6 +11,13 @@ Create date: 2017.04.24
 Description: Implement the Interrupt function
 Others:      none
 Function List:
+             1. extern void HardFault_Handler(void);
+             2. extern void SysTick_Handler(void);
+             3. extern void TIM1_UP_IRQHandler(void);
+             4. extern void TIM3_IRQHandler(void);
+             5. extern void TIM4_IRQHandler(void);
+             6. extern void USART1_IRQHandler(void);
+             7. extern void USART2_IRQHandler(void);
 History:
 <author>    <date>        <desc>
 myyerrol    2017.04.24    Modify the module
@@ -72,33 +79,33 @@ void TIM3_IRQHandler(void)
 {
 }
 
-// void TIM4_IRQHandler(void)
-// {
-//     if (TIM_GetITStatus(TIM4, TIM_IT_Update) == SET)
-//     {
-//         if (++timer_loop_cnt_100hz * 100 >= 1000)
-//         {
-//             timer_loop_cnt_100hz  = 0;
-//             timer_loop_flag_100hz = true;
-//         }
-//         if (++timer_loop_cnt_50hz * 50 >= 1000)
-//         {
-//             timer_loop_cnt_50hz  = 0;
-//             timer_loop_flag_50hz = true;
-//         }
-//         if (++timer_loop_cnt_20hz * 20 >= 1000)
-//         {
-//             timer_loop_cnt_20hz  = 0;
-//             timer_loop_flag_20hz = true;
-//         }
-//         if (++timer_loop_cnt_10hz * 10 >= 1000)
-//         {
-//             timer_loop_cnt_10hz  = 0;
-//             timer_loop_flag_10hz = true;
-//         }
-//         TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
-//     }
-// }
+void TIM4_IRQHandler(void)
+{
+    if (TIM_GetITStatus(TIM4, TIM_IT_Update) == SET)
+    {
+        if (++timer_loop_cnt_100hz * 100 >= 1000)
+        {
+            timer_loop_cnt_100hz  = 0;
+            timer_loop_flag_100hz = true;
+        }
+        if (++timer_loop_cnt_50hz * 50 >= 1000)
+        {
+            timer_loop_cnt_50hz  = 0;
+            timer_loop_flag_50hz = true;
+        }
+        if (++timer_loop_cnt_20hz * 20 >= 1000)
+        {
+            timer_loop_cnt_20hz  = 0;
+            timer_loop_flag_20hz = true;
+        }
+        if (++timer_loop_cnt_10hz * 10 >= 1000)
+        {
+            timer_loop_cnt_10hz  = 0;
+            timer_loop_flag_10hz = true;
+        }
+        TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
+    }
+}
 
 void USART1_IRQHandler(void)
 {
