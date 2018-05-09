@@ -4,7 +4,7 @@ UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
 
 Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
 
-Filename:    stm32f10x_system_led.c
+Filename:    stm32f10x_module_led.c
 Author:      maksyuki
 Version:     0.1.0.20161231_release
 Create date: 2016.08.14
@@ -17,6 +17,7 @@ Function List:
              4. void LED_SetLight(LED_State led_a, LED_State led_b,
                                   LED_State led_c, LED_State led_d);
              5. void LED_UpdateLight(void);
+             6. BitAction TranLEDStateToBitAction(LED_State led);
 History:
 <author>    <date>        <desc>
 maksyuki    2016.12.20    Modify the
@@ -195,47 +196,32 @@ void LED_SetInitialLight(void)
     }
 }
 
+static BitAction TranLEDStateToBitAction(LED_State led)
+{
+    if (led == ON) return Bit_RESET;
+    else return Bit_SET;
+}
+
 void LED_SetLight(LED_State led_a, LED_State led_b, LED_State led_c,
                   LED_State led_d)
 {
-    GPIO_WriteBit(GPIOA, GPIO_Pin_11, led_a);
-    GPIO_WriteBit(GPIOA, GPIO_Pin_12, led_b);
-    GPIO_WriteBit(GPIOA, GPIO_Pin_8,  led_c);
-    GPIO_WriteBit(GPIOA, GPIO_Pin_15, led_d);
+    GPIO_WriteBit(GPIOA, GPIO_Pin_11, TranLEDStateToBitAction(led_a));
+    GPIO_WriteBit(GPIOA, GPIO_Pin_12, TranLEDStateToBitAction(led_b));
+    GPIO_WriteBit(GPIOA, GPIO_Pin_8,  TranLEDStateToBitAction(led_c));
+    GPIO_WriteBit(GPIOA, GPIO_Pin_15, TranLEDStateToBitAction(led_d));
 }
 
 void LED_UpdateLight(void)
 {
-    if (LED_BufferStructure.bits.a)
-    {
-        LED_A_ON;
-    }
-    else
-    {
-        LED_A_OFF;
-    }
-    if (LED_BufferStructure.bits.b)
-    {
-        LED_B_ON;
-    }
-    else
-    {
-        LED_B_OFF;
-    }
-    if (LED_BufferStructure.bits.c)
-    {
-        LED_C_ON;
-    }
-    else
-    {
-        LED_C_OFF;
-    }
-    if (LED_BufferStructure.bits.d)
-    {
-        LED_D_ON;
-    }
-    else
-    {
-        LED_D_OFF;
-    }
+    if (LED_BufferStructure.bits.a) LED_A_ON;
+    else LED_A_OFF;
+
+    if (LED_BufferStructure.bits.b) LED_B_ON;
+    else LED_B_OFF;
+
+    if (LED_BufferStructure.bits.c) LED_C_ON;
+    else LED_C_OFF;
+
+    if (LED_BufferStructure.bits.d) LED_D_ON;
+    else LED_D_OFF;
 }

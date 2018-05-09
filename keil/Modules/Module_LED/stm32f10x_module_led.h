@@ -4,7 +4,7 @@ UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
 
 Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
 
-Filename:    stm32f10x_system_led.h
+Filename:    stm32f10x_module_led.h
 Author:      maksyuki
 Version:     0.1.0.20161231_release
 Create date: 2016.08.14
@@ -17,6 +17,7 @@ Function List:
              4. void LED_SetLight(LED_State led_a, LED_State led_b,
                                   LED_State led_c, LED_State led_d);
              5. void LED_UpdateLight(void);
+             6. BitAction TranLEDStateToBitAction(LED_State led);
 History:
 <author>    <date>        <desc>
 maksyuki    2016.12.20    Modify the module
@@ -94,5 +95,6 @@ extern void LED_SetInitialLight(void);
 extern void LED_SetLight(LED_State led_a, LED_State led_b, LED_State led_c,
                          LED_State led_d);
 extern void LED_UpdateLight(void);
+static BitAction TranLEDStateToBitAction(LED_State led);
 
 #endif

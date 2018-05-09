@@ -54,25 +54,25 @@ u32  comm_link_last_rc_timestamp;
 bool comm_link_fly_enable_flag = false;
 bool comm_link_pc_cmd_flag     = false;
 
-static u8 recv_state      = COMM_LINK_STATE_IDLE;
-static u8 recv_command    = 0;
-static u8 recv_length     = 0;
-static u8 recv_count      = 0;
-static u8 recv_checksum   = 0;
-static u8 send_count      = 0;
-static u8 send_checksum   = 0;
-static u8 recv_buffer[32] = {0};
-static u8 send_buffer[64] = {0XAA, 0XAA, 0X01, 0X14, 0, 100, 0, 200, 0, 130,
-                             0, 0, 0, 100, 0, 0, 0, 200, 0, 0, 0, 30, 0, 10,
-                             0X6B};
-static u8 test_buffer[6]  = {0XAA, 0XAF, 0X02, 0X01, 0X01,
-                            (u8)(0XAA + 0XAF + 0X02 + 1 + 1)};
+//static u8 recv_state      = COMM_LINK_STATE_IDLE;
+//static u8 recv_command    = 0;
+//static u8 recv_length     = 0;
+//static u8 recv_count      = 0;
+//static u8 recv_checksum   = 0;
+//static u8 send_count      = 0;
+//static u8 send_checksum   = 0;
+//static u8 recv_buffer[32] = {0};
+//static u8 send_buffer[64] = {0XAA, 0XAA, 0X01, 0X14, 0, 100, 0, 200, 0, 130,
+//                             0, 0, 0, 100, 0, 0, 0, 200, 0, 0, 0, 30, 0, 10,
+//                             0X6B};
+//static u8 test_buffer[6]  = {0XAA, 0XAF, 0X02, 0X01, 0X01,
+//                            (u8)(0XAA + 0XAF + 0X02 + 1 + 1)};
 
 CommLink_Data CommLink_DataStructure;
 // Take notice of the address alignment, don't initialize 'sum'.
-CommLink_DataPacketA CommLink_DataPacketAStructure = {{0XAA, 0XAA}, 0X01, 18};
-CommLink_DataPacketB CommLink_DataPacketBStructure = {{0XAA, 0XAA}, 0X02, 30,
-                                                      {0}};
+//CommLink_DataPacketA CommLink_DataPacketAStructure = {{0XAA, 0XAA}, 0X01, 18};
+//CommLink_DataPacketB CommLink_DataPacketBStructure = {{0XAA, 0XAA}, 0X02, 30,
+//                                                      {0}};
 
 //void CommLink_AddBits8ToBuffer(u8 byte)
 //{
@@ -439,15 +439,14 @@ static u8 TransUARTStringToChar(void)
     {
         if (USART_CountBuffer(&USART_RingBufferRxStructure) == 0)
             break;
-        
+
         tmpch = USART_ReadBuffer(&USART_RingBufferRxStructure);
         if (tmpch != '\r' && tmpch != '\n')
             break;
     } while (1);
-    
+
     return tmpch;
 }
-
 
 static u16 TransUARTStringToNumber(void)
 {
@@ -459,14 +458,13 @@ static u16 TransUARTStringToNumber(void)
             break;
         tmpch = USART_ReadBuffer(&USART_RingBufferRxStructure);
     } while (tmpch < '0' || tmpch > '9');
-    
-    
+
     while (USART_CountBuffer(&USART_RingBufferRxStructure) > 0)
     {
         tmpch = USART_ReadBuffer(&USART_RingBufferRxStructure);
         if (tmpch < '0' || tmpch > '9')
             break;
-        
+
         tmpval = tmpval * 10 + (tmpch - '0');
     }
     return tmpval;
@@ -493,7 +491,7 @@ static float TransUARTStringToFloat(void)
         {
             is_deci = true;
         }
-        
+
         if (tmpch >= '0' && tmpch <= '9')
         {
             if (!is_deci)
@@ -510,19 +508,23 @@ static float TransUARTStringToFloat(void)
     return tmpval;
 }
 
-
-static void POWER_off(void)
+static void Power_Off(void)
 {
     u8 i;
     Motor_SetPWM(0, 0, 0, 0);
+
     for (i = 1; i <= 6; i++)
+    {
         Delay_TimeMs(1000);
+    }
 
     Motor_SetPWM(999, 999, 999, 999);
 
     for (i = 1; i <= 2; i++)
+    {
         Delay_TimeMs(1000);
-    
+    }
+
     Motor_SetPWM(0, 0, 0, 0);
 }
 
@@ -539,7 +541,6 @@ void CommLink_ReceiveDataFromUART(void)
         {
             case COMM_LINK_MSP_SET_4CON:
             {
-                
                 comm_link_rc_data[IMU_ROLL]    = TransUARTStringToNumber();
                 comm_link_rc_data[IMU_PITCH]   = TransUARTStringToNumber();
                 comm_link_rc_data[IMU_YAW]     = TransUARTStringToNumber();
@@ -553,7 +554,7 @@ void CommLink_ReceiveDataFromUART(void)
             }
             case COMM_LINK_MSP_POWER_OFF:
             {
-                POWER_off();
+                Power_Off();
                 break;
             }
             case COMM_LINK_MSP_ARM_IT:
@@ -793,6 +794,6 @@ float CommLink_CutDBScaleToLinear(float x_start, float x_end, float deadband)
     }
     else
     {
-        return 0.0f;
+        return 0.0F;
     }
 }
