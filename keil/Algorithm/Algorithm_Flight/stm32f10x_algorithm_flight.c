@@ -2,7 +2,7 @@
 THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE IT AND/OR MODIFY IT
 UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
 
-Copyright (C), 2016-2016, Team MicroDynamics <microdynamics@126.com>
+Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
 
 Filename:    stm32f10x_algorithm_flight.c
 Author:      maksyuki
@@ -18,6 +18,7 @@ History:
 <author>    <date>        <desc>
 maksyuki    2017.01.11    Modify the module
 myyerrol    2017.04.29    Format the module
+maksyuki    2018.05.10    Modify the module
 *******************************************************************************/
 
 #include <math.h>
@@ -28,7 +29,6 @@ myyerrol    2017.04.29    Format the module
 #include "stm32f10x_algorithm_flight.h"
 #include "stm32f10x_algorithm_control.h"
 #include "stm32f10x_algorithm_altitude.h"
-
 
 bool flight_lost_rc_flag;
 
@@ -53,7 +53,7 @@ void Flight_SetMode(void)
         {
             if (control_altitude_mode == CONTROL_STATE_MANUAL)
             {
-                CommLink_DataStructure.thr = 200;
+                CommLink_DataStructure.thr = 200; // motor idling setting
             }
         }
     }
@@ -111,6 +111,7 @@ void Flight_HandleFailures(void)
     {
         lost_rc_time = 65536 - comm_link_last_rc_timestamp + new_timestamp;
     }
+
     if (lost_rc_time > FLIGHT_LOST_RC_TIME_MAX)
     {
         if (control_offland_flag || comm_link_fly_enable_flag)

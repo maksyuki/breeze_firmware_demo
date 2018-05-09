@@ -2,7 +2,7 @@
 THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE IT AND/OR MODIFY IT
 UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
 
-Copyright (C), 2016-2016, Team MicroDynamics <microdynamics@126.com>
+Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
 
 Filename:    stm32f10x_algorithm_control.h
 Author:      maksyuki
@@ -24,13 +24,14 @@ History:
 <author>    <date>        <desc>
 maksyuki    2017.01.11    Modify the module
 myyerrol    2017.04.30    Format the module
+maksyuki    2018.05.10    Modify the module
 *******************************************************************************/
 
 #ifndef __STM32F10X_ALGORITHM_CONTROL_H__
 #define __STM32F10X_ALGORITHM_CONTROL_H__
 
-#include <stdbool.h>
 #include <math.h>
+#include <stdbool.h>
 #include "config.h"
 #include "stm32f10x.h"
 
@@ -49,7 +50,7 @@ myyerrol    2017.04.30    Format the module
 
 #define CONTROL_ALT_FEED_FORWARD 0.5F
 #define CONTROL_THRUST_MAX       1.0F
-// Limited height is 3.5m.
+// Limited height is 2.0m.
 #define CONTROL_ALT_LIMIT        2.0F
 #define CONTROL_TILT_MAX         (CONTROL_ANGLE_MAX * M_PI / 180.0)
 // Z deadband.
