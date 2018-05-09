@@ -2,7 +2,7 @@
 THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE IT AND/OR MODIFY IT
 UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
 
-Copyright (C), 2016-2016, Team MicroDynamics <microdynamics@126.com>
+Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
 
 Filename:    stm32f10x_driver_flash.h
 Author:      maksyuki
@@ -36,11 +36,11 @@ myyerrol    2017.04.23    Format the module
 #include "stm32f10x.h"
 
 // The capacity of flash(unit:k).
-#define FLASH_SIZE            32
+#define FLASH_SIZE            128
 // Enable flash writing(0:disable).
 #define FLASH_WREN            1
 // The relative offset to start addfress.
-#define FLASH_OFFEST          0X00007C00
+#define FLASH_OFFEST          0X0001FC00
 // The unlock key value.
 #define FLASH_KEY1            0X45670123
 #define FLASH_KEY2            0XCDEF89AB

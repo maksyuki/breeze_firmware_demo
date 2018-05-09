@@ -2,7 +2,7 @@
 THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE IT AND/OR MODIFY IT
 UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
 
-Copyright (C), 2016-2016, Team MicroDynamics <microdynamics@126.com>
+Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
 
 Filename:    stm32f10x_driver_flash.c
 Author:      maksyuki
@@ -33,8 +33,8 @@ myyerrol    2017.04.23    Format the module
 #include "stm32f10x_driver_delay.h"
 #include "stm32f10x_driver_flash.h"
 
-// The start address of small capacity flash's last page is 0X08007C00, end
-// address is 0X08007FFF. Every page is 1k bytes.
+// The start address of medium capacity flash's last page is 0x0801FC00, end
+// address is 0x0801FFFF. Every page is 1k bytes.
 
 // Lock flash.
 void Flash_Lock(void)
@@ -229,7 +229,7 @@ u8 Flash_GetStatus(void)
         return FLASH_STATE_ERROR_WP;
     }
 
-    return 0;
+    return FLASH_STATE_OK;
 }
 
 u8 Flash_WaitDone(u16 time)
