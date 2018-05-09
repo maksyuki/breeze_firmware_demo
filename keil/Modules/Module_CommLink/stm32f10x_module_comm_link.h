@@ -2,7 +2,7 @@
 THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE IT AND/OR MODIFY IT
 UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
 
-Copyright (C), 2016-2016, Team MicroDynamics <microdynamics@126.com>
+Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
 
 Filename:    stm32f10x_module_comm_link.h
 Author:      myyerrol
@@ -32,13 +32,14 @@ Function List:
 History:
 <author>    <date>        <desc>
 myyerrol    2017.04.28    Modify the module
+maksyuki    2018.05.10    Modify the module
 *******************************************************************************/
 
 #ifndef __STM32F10X_Module_COMM_LINK_H__
 #define __STM32F10X_Module_COMM_LINK_H__
 
-#include <stdbool.h>
 #include <math.h>
+#include <stdbool.h>
 #include "stm32f10x.h"
 #include "stm32f10x_algorithm_control.h"
 

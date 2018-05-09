@@ -1,5 +1,27 @@
-#include <stdio.h>
+/*******************************************************************************
+THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE IT AND/OR MODIFY IT
+UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
+
+Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
+
+Filename:    stm32f10x_module_mpu6050_dmp.c
+Author:      maksyuki
+Version:     none
+Create date: 2018.05.09
+Description: Implement the mpu6050 function
+Others:      none
+Function List:
+             1. u8 MPU6050_DMP_Init(void);
+             2. void DMP_Routing(void);
+             3. void DMP_Covert_Data(void);
+             4. void DMP_getYawPitchRoll(void);
+History:
+<author>    <date>        <desc>
+maksyuki    2018.05.10    Modify the module
+*******************************************************************************/
+
 #include <math.h>
+#include <stdio.h>
 #include "config.h"
 #include "stm32f10x_driver_delay.h"
 #include "stm32f10x_module_mpu6050.h"

@@ -21,6 +21,7 @@ History:
 <author>    <date>        <desc>
 maksyuki    2016.12.20    Modify the module
 myyerrol    2017.04.11    Format the module
+maksyuki    2018.05.10    Modify the module
 *******************************************************************************/
 
 #ifndef __STM32F10X_MODULE_LED_H__

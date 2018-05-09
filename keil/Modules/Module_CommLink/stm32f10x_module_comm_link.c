@@ -2,7 +2,7 @@
 THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE IT AND/OR MODIFY IT
 UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
 
-Copyright (C), 2016-2016, Team MicroDynamics <microdynamics@126.com>
+Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
 
 Filename:    stm32f10x_module_comm_link.c
 Author:      myyerrol
@@ -32,19 +32,20 @@ Function List:
 History:
 <author>    <date>        <desc>
 myyerrol    2017.04.28    Modify the module
+maksyuki    2018.05.10    Modify the module
 *******************************************************************************/
 
 #include "stm32f10x_driver_delay.h"
-#include "stm32f10x_driver_eeprom.h"
 #include "stm32f10x_driver_usart.h"
+#include "stm32f10x_driver_eeprom.h"
 //#include "stm32f10x_module_battery.h"
 #include "stm32f10x_module_led.h"
 #include "stm32f10x_module_motor.h"
 #include "stm32f10x_module_ms5611.h"
 #include "stm32f10x_module_comm_link.h"
 //#include "stm32f10x_module_nrf24l01.h"
-#include "stm32f10x_algorithm_altitude.h"
 #include "stm32f10x_algorithm_imu.h"
+#include "stm32f10x_algorithm_altitude.h"
 
 u8   comm_link_mcu_state   = COMM_LINK_STATE_DISEN_MCU;
 u16  comm_link_rc_data[4]  = {1500, 1500, 1500, 1500};
