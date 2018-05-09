@@ -13,16 +13,16 @@
       <pCCUsed>5060061::V5.06 update 1 (build 61)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
-          <Device>STM32F103T6</Device>
+          <Device>STM32F103TB</Device>
           <Vendor>STMicroelectronics</Vendor>
           <PackID>Keil.STM32F1xx_DFP.2.1.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
-          <Cpu>IROM(0x08000000,0x8000) IRAM(0x20000000,0x2800) CPUTYPE("Cortex-M3") CLOCK(12000000) ELITTLE</Cpu>
+          <Cpu>IROM(0x08000000,0x20000) IRAM(0x20000000,0x5000) CPUTYPE("Cortex-M3") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F10x_128 -FS08000000 -FL020000 -FP0($$Device:STM32F103T6$Flash\STM32F10x_128.FLM))</FlashDriverDll>
-          <DeviceId>4402</DeviceId>
-          <RegisterFile>$$Device:STM32F103T6$Device\Include\stm32f10x.h</RegisterFile>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F10x_128 -FS08000000 -FL020000 -FP0($$Device:STM32F103TB$Flash\STM32F10x_128.FLM))</FlashDriverDll>
+          <DeviceId>5146</DeviceId>
+          <RegisterFile>$$Device:STM32F103TB$Device\Include\stm32f10x.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -32,7 +32,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:STM32F103T6$SVD\STM32F103xx.svd</SFDFile>
+          <SFDFile>$$Device:STM32F103TB$SVD\STM32F103xx.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -47,7 +47,7 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>.\Build\</OutputDirectory>
+          <OutputDirectory>..\Build\</OutputDirectory>
           <OutputName>breeze_firmware_none</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
@@ -109,13 +109,13 @@
         </CommonProperty>
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
-          <SimDllArguments></SimDllArguments>
+          <SimDllArguments>-REMAP</SimDllArguments>
           <SimDlgDll>DARMSTM.DLL</SimDlgDll>
-          <SimDlgDllArguments>-pSTM32F103T6</SimDlgDllArguments>
+          <SimDlgDllArguments>-pSTM32F103TB</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
           <TargetDllArguments></TargetDllArguments>
           <TargetDlgDll>TARMSTM.DLL</TargetDlgDll>
-          <TargetDlgDllArguments>-pSTM32F103T6</TargetDlgDllArguments>
+          <TargetDlgDllArguments>-pSTM32F103TB</TargetDlgDllArguments>
         </DllOption>
         <DebugOption>
           <OPTHX>
@@ -126,7 +126,7 @@
             <Oh166RecLen>16</Oh166RecLen>
           </OPTHX>
           <Simulator>
-            <UseSimulator>1</UseSimulator>
+            <UseSimulator>0</UseSimulator>
             <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
             <RunToMain>1</RunToMain>
             <RestoreBreakpoints>1</RestoreBreakpoints>
@@ -138,7 +138,7 @@
             <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
-            <UseTarget>0</UseTarget>
+            <UseTarget>1</UseTarget>
             <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
             <RunToMain>1</RunToMain>
             <RestoreBreakpoints>1</RestoreBreakpoints>
@@ -150,7 +150,7 @@
             <RestoreSysVw>1</RestoreSysVw>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>4</TargetSelection>
+          <TargetSelection>6</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -284,12 +284,12 @@
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x2800</Size>
+                <Size>0x5000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x8000</Size>
+                <Size>0x20000</Size>
               </IROM>
               <XRAM>
                 <Type>0</Type>
@@ -314,7 +314,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x8000</Size>
+                <Size>0x20000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -339,7 +339,7 @@
               <OCR_RVCT9>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x2800</Size>
+                <Size>0x5000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -371,7 +371,7 @@
             <vShortWch>0</vShortWch>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER, STM32F10X_LD</Define>
+              <Define>USE_STDPERIPH_DRIVER, STM32F10X_MD</Define>
               <Undefine></Undefine>
               <IncludePath>..\Libraries\CMSIS;..\Libraries\FWLib\inc;..\User;..\Drivers\Driver_IO;..\Drivers\Driver_IIC;..\Drivers\Driver_Timer;..\Drivers\Driver_NVIC;..\Drivers\Driver_Clock;..\Drivers\Driver_Flash;..\Drivers\Driver_Delay;..\Drivers\Driver_USART;..\Drivers\Driver_EEPROM;..\Modules\Module_LED;..\Modules\Module_Motor;..\Modules\Module_MS5611;..\Modules\Module_MPU6050;..\Modules\Module_CommLink;..\Algorithm\Algorithm_IMU;..\Algorithm\Algorithm_Filter;..\Algorithm\Algorithm_Flight;..\Algorithm\Algorithm_Control;..\Algorithm\Algorithm_Altitude</IncludePath>
             </VariousControls>
@@ -417,9 +417,9 @@
           <GroupName>Startup</GroupName>
           <Files>
             <File>
-              <FileName>startup_stm32f10x_ld.s</FileName>
+              <FileName>startup_stm32f10x_md.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\Libraries\CMSIS\startup\startup_stm32f10x_ld.s</FilePath>
+              <FilePath>..\Libraries\CMSIS\startup\startup_stm32f10x_md.s</FilePath>
             </File>
           </Files>
         </Group>
