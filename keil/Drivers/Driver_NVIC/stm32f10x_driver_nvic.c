@@ -19,6 +19,7 @@ Function List:
 History:
 <author>    <date>        <desc>
 myyerrol    2017.04.14    Modify the module
+maksyuki    2018.05.10    Modify the module
 *******************************************************************************/
 
 #include "stm32f10x_driver_nvic.h"

@@ -14,8 +14,9 @@ Function List:
              1. void Timer_InitTIM1(u16 arr, u16 psc);
              2. void Timer_InitTIM4(u16 arr, u16 psc);
 History:
-1. <author>    <date>         <desc>
-   maksyuki  2016.12.03  modify the module
+<author>    <date>        <desc>
+maksyuki    2016.12.03    Modify the module
+maksyuki    2018.05.10    Modify the module
 *******************************************************************************/
 
 #include "stm32f10x_driver_nvic.h"

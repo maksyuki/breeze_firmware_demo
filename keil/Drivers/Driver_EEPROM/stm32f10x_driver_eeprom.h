@@ -24,6 +24,7 @@ History:
 <author>    <date>        <desc>
 maksyuki    2016.12.19    Modify the module
 myyerrol    2017.04.22    Format the module
+maksyuki    2018.05.10    Modify the module
 *******************************************************************************/
 
 #ifndef __STM32F10X_DRIVER_EEPROM_H__

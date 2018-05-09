@@ -28,6 +28,7 @@ History:
 <author>    <date>        <desc>
 maksyuki    2016.12.04    Modify the module
 myyerrol    2017.04.23    Format the module
+maksyuki    2018.05.10    Modify the module
 *******************************************************************************/
 
 #include "stm32f10x_driver_delay.h"
