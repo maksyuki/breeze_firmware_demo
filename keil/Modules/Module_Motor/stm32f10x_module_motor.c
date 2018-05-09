@@ -2,7 +2,7 @@
 THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE IT AND/OR MODIFY IT
 UNDER THE TERMS OF THE GNU GPLV3 AS PUBLISHED BY THE FREE SOFTWARE FOUNDATION.
 
-Copyright (C), 2016-2016, Team MicroDynamics <microdynamics@126.com>
+Copyright (C), 2016-2018, Team MicroDynamics <microdynamics@126.com>
 
 Filename:    stm32f10x_module_motor.c
 Author:      myyerrol
@@ -23,7 +23,7 @@ myyerrol    2017.04.23    Modify the module
 
 void Motor_Init(void)
 {
-    u16                     prescaler = (u16)(SystemCoreClock / 24000000) - 1;
+//    u16                     prescaler = (u16)(SystemCoreClock / 24000000) - 1; //For 72MHz
     GPIO_InitTypeDef        GPIO_InitStructure;
     TIM_OCInitTypeDef       TIM_OCInitStructure;
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
@@ -40,7 +40,8 @@ void Motor_Init(void)
     TIM_DeInit(TIM2);
     TIM_DeInit(TIM3);
     TIM_TimeBaseStructure.TIM_Period        = 999;
-    TIM_TimeBaseStructure.TIM_Prescaler     = prescaler;
+//    TIM_TimeBaseStructure.TIM_Prescaler     = prescaler; //For 72MHz
+    TIM_TimeBaseStructure.TIM_Prescaler     = 2;
     TIM_TimeBaseStructure.TIM_ClockDivision = 0;
     TIM_TimeBaseStructure.TIM_CounterMode   = TIM_CounterMode_Up;
     TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
@@ -69,38 +70,15 @@ void Motor_Init(void)
 void Motor_SetPWM(s16 motor1_pwm, s16 motor2_pwm, s16 motor3_pwm,
                   s16 motor4_pwm)
 {
-    if (motor1_pwm <= 0)
-    {
-        motor1_pwm = 0;
-    }
-    if (motor2_pwm <= 0)
-    {
-        motor2_pwm = 0;
-    }
-    if (motor3_pwm <= 0)
-    {
-        motor3_pwm = 0;
-    }
-    if (motor4_pwm <= 0)
-    {
-        motor4_pwm = 0;
-    }
-    if (motor1_pwm >= MOTOR_PWM_MAXVALUE)
-    {
-        motor1_pwm = MOTOR_PWM_MAXVALUE;
-    }
-    if (motor2_pwm >= MOTOR_PWM_MAXVALUE)
-    {
-        motor2_pwm = MOTOR_PWM_MAXVALUE;
-    }
-    if (motor3_pwm >= MOTOR_PWM_MAXVALUE)
-    {
-        motor3_pwm = MOTOR_PWM_MAXVALUE;
-    }
-    if (motor4_pwm >= MOTOR_PWM_MAXVALUE)
-    {
-        motor4_pwm = MOTOR_PWM_MAXVALUE;
-    }
+    if (motor1_pwm <= 0) motor1_pwm = 0;
+    if (motor2_pwm <= 0) motor2_pwm = 0;
+    if (motor3_pwm <= 0) motor3_pwm = 0;
+    if (motor4_pwm <= 0) motor4_pwm = 0;
+
+    if (motor1_pwm >= MOTOR_PWM_MAXVALUE) motor1_pwm = MOTOR_PWM_MAXVALUE;
+    if (motor2_pwm >= MOTOR_PWM_MAXVALUE) motor2_pwm = MOTOR_PWM_MAXVALUE;
+    if (motor3_pwm >= MOTOR_PWM_MAXVALUE) motor3_pwm = MOTOR_PWM_MAXVALUE;
+    if (motor4_pwm >= MOTOR_PWM_MAXVALUE) motor4_pwm = MOTOR_PWM_MAXVALUE;
 
     TIM_SetCompare1(TIM2, motor1_pwm);
     TIM_SetCompare2(TIM2, motor2_pwm);
