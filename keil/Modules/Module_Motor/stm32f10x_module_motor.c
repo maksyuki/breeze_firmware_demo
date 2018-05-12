@@ -24,7 +24,7 @@ maksyuki    2018.05.10    Modify the module
 
 void Motor_Init(void)
 {
-//    u16                     prescaler = (u16)(SystemCoreClock / 24000000) - 1; //For 72MHz
+    u16                     prescaler = (u16)(SystemCoreClock / 24000000) - 1; //For 72MHz
     GPIO_InitTypeDef        GPIO_InitStructure;
     TIM_OCInitTypeDef       TIM_OCInitStructure;
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
@@ -41,8 +41,8 @@ void Motor_Init(void)
     TIM_DeInit(TIM2);
     TIM_DeInit(TIM3);
     TIM_TimeBaseStructure.TIM_Period        = 999;
-//    TIM_TimeBaseStructure.TIM_Prescaler     = prescaler; //For 72MHz
-    TIM_TimeBaseStructure.TIM_Prescaler     = 2;
+    TIM_TimeBaseStructure.TIM_Prescaler     = prescaler; //For 72MHz
+//    TIM_TimeBaseStructure.TIM_Prescaler     = 2;
     TIM_TimeBaseStructure.TIM_ClockDivision = 0;
     TIM_TimeBaseStructure.TIM_CounterMode   = TIM_CounterMode_Up;
     TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);

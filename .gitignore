@@ -46,3 +46,4 @@
 *.abcd
 *.swp
 JLinkLog.txt
+/Build
