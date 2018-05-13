@@ -37,6 +37,7 @@ extern u8 usart_ring_buffer_rx[USART_BUFFER_SIZE];
 extern u8 usart_ring_buffer_tx[USART_BUFFER_SIZE];
 extern u8 usart_rx_completion_flag;
 extern u8 usart_rx_start_at_first;    
+extern u8 usart_rx_data_cnt;
 
 typedef struct
 {

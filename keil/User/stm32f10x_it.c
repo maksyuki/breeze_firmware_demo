@@ -119,29 +119,36 @@ void USART1_IRQHandler(void)
     }
     else if (USART_GetITStatus(USART1, USART_IT_RXNE) == SET)
     {
-        
         //if(tmpch == 'a') LED_A_TOGGLE;
         //if(tmpch == 'b') LED_B_TOGGLE;
         //debug USART_SendData(USART1, (u8)USART_ReceiveData(USART1));
         
-        
         if (!usart_rx_completion_flag) // need to continue to receive data, if the `usart_rx_completion_flag is true,
         {                   // it means the data haven't to be dealt with yet.
             u8 tmpch = (u8) USART_ReceiveData(USART1);
-            if (tmpch == '$')
+            if (tmpch == '!' || tmpch == '\"' ||
+                tmpch == '#' || tmpch == '$'  || tmpch == '%')
             {
                 USART_WriteBuffer(&USART_RingBufferRxStructure, tmpch);
                 usart_rx_start_at_first = 1;
+                if (tmpch == '!' || tmpch == '\"' ||
+                    tmpch == '#' || tmpch == '$')
+                {
+                    usart_rx_completion_flag = 1;
+                }
             }
             else
             {
                 if (usart_rx_start_at_first)
                 {
                     USART_WriteBuffer(&USART_RingBufferRxStructure, tmpch);
-                    if (tmpch == '<') 
+
+                    usart_rx_data_cnt++;
+                    if (usart_rx_data_cnt == 8)
                     {
                         usart_rx_completion_flag = 1;
                         usart_rx_start_at_first  = 0;
+                        usart_rx_data_cnt = 0;
                     }
                 }
             }
