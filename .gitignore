@@ -46,4 +46,4 @@
 *.abcd
 *.swp
 JLinkLog.txt
-/Build
+keil/Build/
