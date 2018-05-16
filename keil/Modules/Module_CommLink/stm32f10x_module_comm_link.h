@@ -49,12 +49,12 @@ maksyuki    2018.05.10    Modify the module
 #define COMM_LINK_MSP_SET_PITCH       3
 //#define COMM_LINK_MSP_SET_ROLL        4
 
-#define COMM_LINK_MSP_POWER_OFF       4
-#define COMM_LINK_MSP_SET_4CON        5
-#define COMM_LINK_MSP_ARM_IT          6
-#define COMM_LINK_MSP_DISARM_IT       7
-#define COMM_LINK_MSP_ACC_CALI        8
-#define COMM_LINK_MSP_BATTERY         9
+#define COMM_LINK_MSP_POWER_OFF       0x24
+#define COMM_LINK_MSP_SET_4CON        0x25
+#define COMM_LINK_MSP_ARM_IT          0x22
+#define COMM_LINK_MSP_DISARM_IT       0x23
+#define COMM_LINK_MSP_ACC_CALI        0x21
+#define COMM_LINK_MSP_BATTERY         0x26
 
 //#define COMM_LINK_MSP_SETOFF          8
 //#define COMM_LINK_MSP_LAND_DOWN       9
@@ -168,7 +168,7 @@ extern void  CommLink_HandleDebugDataB(void);
 extern void  CommLink_HandleDebugDataC(void);
 extern void  CommLink_ProcessDataFromUART(void);
 static u8    TransUARTStringToChar(void);
-static u16   TransUARTStringToNumber(void);
+static s16   TransUARTStringToNumber(void);
 static float TransUARTStringToFloat(void);
 extern void  CommLink_ReceiveDataFromUART(void);
 extern void  CommLink_ReadPacket(u8 byte);

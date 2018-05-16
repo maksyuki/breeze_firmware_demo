@@ -68,7 +68,7 @@ bool comm_link_pc_cmd_flag     = false;
 //static u8 test_buffer[6]  = {0XAA, 0XAF, 0X02, 0X01, 0X01,
 //                            (u8)(0XAA + 0XAF + 0X02 + 1 + 1)};
 
-CommLink_Data CommLink_DataStructure;
+CommLink_Data CommLink_DataStructure = {0, 0, 0, 0};
 // Take notice of the address alignment, don't initialize 'sum'.
 //CommLink_DataPacketA CommLink_DataPacketAStructure = {{0XAA, 0XAA}, 0X01, 18};
 //CommLink_DataPacketB CommLink_DataPacketBStructure = {{0XAA, 0XAA}, 0X02, 30,
@@ -363,9 +363,9 @@ void CommLink_ProcessDataFromUART(void)
         { // `&& !Battery_InformationStructure.flag_alarm` in the next line `if` 
             if (IMU_Check())
             {
+                LED_C_ON;
                 comm_link_mcu_state       = COMM_LINK_STATE_EN_MCU;
                 comm_link_fly_enable_flag = true;
-                LED_C_ON;
             }
             else
             {
@@ -448,64 +448,20 @@ static u8 TransUARTStringToChar(void)
     return tmpch;
 }
 
-static u16 TransUARTStringToNumber(void)
+union packet
 {
-    u8 tmpch;
-    u16 tmpval = 0;
-    do
-    {
-        if (USART_CountBuffer(&USART_RingBufferRxStructure) == 0)
-            break;
-        tmpch = USART_ReadBuffer(&USART_RingBufferRxStructure);
-    } while (tmpch < '0' || tmpch > '9');
+    u16 val;
+    u8 ch[2];
+}tranpacket;
 
-    while (USART_CountBuffer(&USART_RingBufferRxStructure) > 0)
-    {
-        tmpch = USART_ReadBuffer(&USART_RingBufferRxStructure);
-        if (tmpch < '0' || tmpch > '9')
-            break;
-
-        tmpval = tmpval * 10 + (tmpch - '0');
-    }
-    return tmpval;
-}
-
-
-static float TransUARTStringToFloat(void)
+static s16 TransUARTStringToNumber(void)
 {
-    u8 tmpch;
-    bool is_deci = false;
-    float tmpval = 0.0F;
-    float deci_base = 0.1F;
-    do
+    s8 i;
+    for (i = 1; i >= 0; i--)
     {
-        if (USART_CountBuffer(&USART_RingBufferRxStructure) == 0)
-            break;
-        tmpch = USART_ReadBuffer(&USART_RingBufferRxStructure);
-    } while (tmpch < '0' || tmpch > '9');
-    
-    while (USART_CountBuffer(&USART_RingBufferRxStructure) > 0)
-    {
-        tmpch = USART_ReadBuffer(&USART_RingBufferRxStructure);
-        if (tmpch == '.')
-        {
-            is_deci = true;
-        }
-
-        if (tmpch >= '0' && tmpch <= '9')
-        {
-            if (!is_deci)
-            {
-                tmpval = tmpval * 10 + (tmpch - '0');
-            }
-            else
-            {
-                tmpval += deci_base * (tmpch - '0');
-                deci_base /=  10.0F;
-            }
-        }
+        tranpacket.ch[i] = USART_ReadBuffer(&USART_RingBufferRxStructure);
     }
-    return tmpval;
+    return tranpacket.val;
 }
 
 static void Power_Off(void)
@@ -513,69 +469,60 @@ static void Power_Off(void)
     u8 i;
     Motor_SetPWM(0, 0, 0, 0);
 
-    for (i = 1; i <= 6; i++)
+    for (i = 1; i <= 4; i++)
     {
         Delay_TimeMs(1000);
     }
 
     Motor_SetPWM(999, 999, 999, 999);
-
-    for (i = 1; i <= 2; i++)
-    {
-        Delay_TimeMs(1000);
-    }
-
+    Delay_TimeMs(1000);
     Motor_SetPWM(0, 0, 0, 0);
 }
 
 // if the `usart_rx_completion_flag` is true, this function will be called in `main` function
 void CommLink_ReceiveDataFromUART(void)
 {
-    u8 header_ch1, header_ch2, cmd_ch3;
-    header_ch1 = TransUARTStringToChar();
-    header_ch2 = TransUARTStringToChar();
-    cmd_ch3    = TransUARTStringToChar();;
-    if (header_ch1 == '$' && header_ch2 == '>')
+    u8 header = TransUARTStringToChar();
+    
+    switch (header)
     {
-        switch (cmd_ch3 - '0')
+        case COMM_LINK_MSP_SET_4CON:
         {
-            case COMM_LINK_MSP_SET_4CON:
-            {
-                comm_link_rc_data[IMU_ROLL]    = TransUARTStringToNumber();
-                comm_link_rc_data[IMU_PITCH]   = TransUARTStringToNumber();
-                comm_link_rc_data[IMU_YAW]     = TransUARTStringToNumber();
-                comm_link_rc_data[IMU_THRUST]  = TransUARTStringToNumber();
-                break;
-            }
-            case COMM_LINK_MSP_BATTERY:
-            {
-                comm_link_rc_bat = TransUARTStringToFloat();
-                break;
-            }
-            case COMM_LINK_MSP_POWER_OFF:
-            {
-                Power_Off();
-                break;
-            }
-            case COMM_LINK_MSP_ARM_IT:
-            {
-                comm_link_mcu_state = COMM_LINK_STATE_REQ_EN_MCU;
-                break;
-            }
-            case COMM_LINK_MSP_DISARM_IT:
-            {
-                comm_link_mcu_state = COMM_LINK_STATE_REQ_DISEN_MCU;
-                break;
-            }
-            case COMM_LINK_MSP_ACC_CALI:
-            {
-                imu_cali_flag = true;
-                break;
-            }
+            comm_link_rc_data[IMU_ROLL]    = TransUARTStringToNumber();
+            comm_link_rc_data[IMU_PITCH]   = TransUARTStringToNumber();
+            comm_link_rc_data[IMU_YAW]     = TransUARTStringToNumber();
+            comm_link_rc_data[IMU_THRUST]  = TransUARTStringToNumber();
+//            printf("roll: %d pitch: %d yaw: %d thrust: %d\r\n", 
+//            comm_link_rc_data[IMU_ROLL], comm_link_rc_data[IMU_PITCH],
+//            comm_link_rc_data[IMU_YAW],  comm_link_rc_data[IMU_THRUST]);
+            break;
         }
-        TransUARTStringToNumber(); // Process the trailing char.
+        case COMM_LINK_MSP_BATTERY:
+        {
+//            comm_link_rc_bat = TransUARTStringToFloat();
+            break;
+        }
+        case COMM_LINK_MSP_POWER_OFF:
+        {
+            Power_Off();
+            break;
+        }
+        case COMM_LINK_MSP_ARM_IT:
+        {
+            comm_link_mcu_state = COMM_LINK_STATE_REQ_EN_MCU;
+            break;
+        }
+        case COMM_LINK_MSP_DISARM_IT:
+        {
+            comm_link_mcu_state = COMM_LINK_STATE_REQ_DISEN_MCU;
+            break;
+        }
+        case COMM_LINK_MSP_ACC_CALI:
+        {
+            imu_cali_flag = true;
+            break;
+        }
     }
-
     comm_link_last_rc_timestamp = Delay_GetRuntimeMs();
 }
 

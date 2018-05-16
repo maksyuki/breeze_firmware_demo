@@ -81,8 +81,8 @@ void Motor_SetPWM(s16 motor1_pwm, s16 motor2_pwm, s16 motor3_pwm,
     if (motor3_pwm >= MOTOR_PWM_MAXVALUE) motor3_pwm = MOTOR_PWM_MAXVALUE;
     if (motor4_pwm >= MOTOR_PWM_MAXVALUE) motor4_pwm = MOTOR_PWM_MAXVALUE;
 
-    TIM_SetCompare1(TIM2, motor1_pwm);
-    TIM_SetCompare2(TIM2, motor2_pwm);
-    TIM_SetCompare3(TIM3, motor3_pwm);
-    TIM_SetCompare4(TIM3, motor4_pwm);
+    TIM_SetCompare3(TIM3, motor1_pwm); // For the `LF RF LB RB` sequence
+    TIM_SetCompare4(TIM3, motor2_pwm);
+    TIM_SetCompare2(TIM2, motor3_pwm);
+    TIM_SetCompare1(TIM2, motor4_pwm);
 }
