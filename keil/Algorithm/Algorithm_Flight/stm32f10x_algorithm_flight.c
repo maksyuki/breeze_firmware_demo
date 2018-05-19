@@ -53,7 +53,7 @@ void Flight_SetMode(void)
         {
             if (control_altitude_mode == CONTROL_STATE_MANUAL)
             {
-                CommLink_DataStructure.thr = 100; // motor idling setting
+//                CommLink_DataStructure.thr = 200; // motor idling setting
             }
         }
     }

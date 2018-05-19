@@ -29,8 +29,8 @@ maksyuki    2018.05.10    Modify the module
 
 #include "stm32f10x_it.h"
 #include "stm32f10x_driver_delay.h"
-//#include "stm32f10x_module_battery.h"
 #include "stm32f10x_module_motor.h"
+#include "stm32f10x_module_battery.h"
 #include "stm32f10x_module_comm_link.h"
 #include "stm32f10x_algorithm_imu.h"
 #include "stm32f10x_algorithm_control.h"
@@ -88,8 +88,10 @@ void Control_CallPIDAngle(void)
     }
     else
     {
-        target_angle[IMU_ROLL]  = split_power_roll;
-        target_angle[IMU_PITCH] = split_power_pitch;
+        target_angle[IMU_ROLL]  = (float)CommLink_DataStructure.roll;
+        target_angle[IMU_PITCH] = (float)CommLink_DataStructure.pitch;
+//        target_angle[IMU_ROLL]  = split_power_roll;
+//        target_angle[IMU_PITCH] = split_power_pitch;
     }
 
     if (head_free_mode_flag)
@@ -108,11 +110,21 @@ void Control_CallPIDAngle(void)
         target_angle[IMU_PITCH] = target_angle[IMU_PITCH] * diff_cos +
             target_angle[IMU_ROLL]  * diff_sin;
     }
-
+    
     Control_CallPIDPosition(&Control_PIDPitchAngle, target_angle[IMU_PITCH],
                             IMU_TableStructure.pitch_ang, delta_time);
     Control_CallPIDPosition(&Control_PIDRollAngle, target_angle[IMU_ROLL],
                             IMU_TableStructure.roll_ang, delta_time);
+    
+//    printf("target pitch: %f target roll: %f\r\n", target_angle[IMU_PITCH], target_angle[IMU_ROLL]);
+//    printf("actual pitch: %f actual roll: %f\r\n", IMU_TableStructure.pitch_ang, IMU_TableStructure.roll_ang);
+//    printf("gyro   pitch: %f gyro   roll: %f gyro   yaw: %f\r\n", IMU_TableStructure.gyr[IMU_PITCH] * 180.0F / M_PI,
+//                                                                  IMU_TableStructure.gyr[IMU_ROLL]  * 180.0F / M_PI,
+//                                                                  IMU_TableStructure.gyr[IMU_YAW]   * 180.0F / M_PI);
+//    
+//    printf("angle pitch output: %f angle roll output: %f angle yaw output: %f\r\n", Control_PIDPitchAngle.output,
+//                                                                  Control_PIDRollAngle.output,
+//                                                                  -(float)CommLink_DataStructure.yaw);
 }
 
 // Control quadcopter's attitude. Angle rate control in cascade pid.
@@ -285,7 +297,7 @@ void Control_SetAltitude(void)
     // Get estimated value for hover.
     if (control_integral_reset_flag)
     {
-        //control_thrust_z_integral   = Control_EstimateThrustRefHover();
+        control_thrust_z_integral   = Control_EstimateThrustRefHover();
         control_integral_reset_flag = false;
     }
 
@@ -299,7 +311,7 @@ void Control_SetAltitude(void)
         val_z_error_der * Control_PIDAltVel.kd + control_thrust_z_integral;
 
     // Limit thrust's min.
-    //thrust_min = Control_EstimateThrustRefMin();
+    thrust_min = Control_EstimateThrustRefMin();
 
     if (control_altitude_mode != CONTROL_STATE_LANDING)
     {
@@ -314,16 +326,16 @@ void Control_SetAltitude(void)
     saturation_z_flag  = false;
     // Convert angle to acceleration(target).
     thrust_xy_split_power[0]  = sinf(CommLink_DataStructure.roll * M_PI /
-        180.0f);
+        180.0F);
     // Normalization.
     thrust_xy_split_power[1]  = sinf(CommLink_DataStructure.pitch * M_PI /
-        180.0f);
+        180.0F);
     thrust_xy_split_power_len = sqrtf(thrust_xy_split_power[0] *
         thrust_xy_split_power[0] + thrust_xy_split_power[1] *
         thrust_xy_split_power[1]);
 
     // Limit tilt's max.
-    if (thrust_xy_split_power_len > 0.01f)
+    if (thrust_xy_split_power_len > 0.01F)
     {
         thrust_xy_max = -control_thrust_z_split_power * tanf(CONTROL_TILT_MAX);
         if (thrust_xy_split_power_len > thrust_xy_max)
@@ -346,13 +358,13 @@ void Control_SetAltitude(void)
     if (thrust_split_power_len > CONTROL_THRUST_MAX)
     {
         // Goint up.
-        if (control_thrust_z_split_power < 0.0f)
+        if (control_thrust_z_split_power < 0.0F)
         {
             if (-control_thrust_z_split_power > CONTROL_THRUST_MAX)
             {
                 // Limit thrust z.
-                thrust_xy_split_power[0]     = 0.0f;
-                thrust_xy_split_power[1]     = 0.0f;
+                thrust_xy_split_power[0]     = 0.0F;
+                thrust_xy_split_power[1]     = 0.0F;
                 control_thrust_z_split_power = -CONTROL_THRUST_MAX;
                 saturation_xy_flag           = true;
                 saturation_z_flag            = true;
@@ -383,16 +395,16 @@ void Control_SetAltitude(void)
         }
     }
 
-    split_power_roll  = asinf(thrust_xy_split_power[0]) * 180.0f / M_PI;
-    split_power_pitch = asinf(thrust_xy_split_power[1]) * 180.0f / M_PI;
+    split_power_roll  = asinf(thrust_xy_split_power[0]) * 180.0F / M_PI;
+    split_power_pitch = asinf(thrust_xy_split_power[1]) * 180.0F / M_PI;
 
     // If appear saturation, don't integrate.
     if (!saturation_z_flag)
     {
         control_thrust_z_integral += vel_z_error * Control_PIDAltVel.ki * delta_time;
-        if (control_thrust_z_integral > 0.0f)
+        if (control_thrust_z_integral > 0.0F)
         {
-            control_thrust_z_integral = 0.0f;
+            control_thrust_z_integral = 0.0F;
         }
     }
 }
@@ -422,23 +434,53 @@ void Control_SetMotorPWM(void)
     }
     else
     {
+        //======TEST======START
+        output_thrust = CommLink_DataStructure.thr;
+        //======TEST======END
+
         // The tilt compensation effect is good, sometimes too fierce.
-        output_thrust = (-control_thrust_z_split_power) * 1000;
-        if (output_thrust > 1000)
-        {
-            output_thrust = 1000;
-        }
+//        output_thrust = (-control_thrust_z_split_power) * 1000;
+//        if (output_thrust > 1000)
+//        {
+//            output_thrust = 1000;
+//        }
     }
 
+    //output_thrust = 100;
     // Fuse the values to motors.
+    
+    //debug!!!
+//    output_yaw = 0;
+    //debug!!!
     output_motor[0] = (s16)(output_thrust + output_pitch + output_roll -
         output_yaw);
-    output_motor[1] = (s16)(output_thrust + output_pitch - output_roll +
+    output_motor[1] = (s16)(output_thrust - output_pitch + output_roll +
         output_yaw);
-    output_motor[2] = (s16)(output_thrust - output_pitch - output_roll -
+    output_motor[2] = (s16)(output_thrust + output_pitch - output_roll +
         output_yaw);
-    output_motor[3] = (s16)(output_thrust - output_pitch + output_roll +
+    output_motor[3] = (s16)(output_thrust - output_pitch - output_roll -
         output_yaw);
+
+    //======TEST======START
+//    printf("thrust: %.8f pitch: %.8f roll: %.8f yaw: %.8f\r\n", output_thrust,
+//    output_pitch, output_roll, output_yaw);
+//    printf("%.8f %.8f %.8f %.8f\r\n", Delay_GetRuntimeMs() / 1000.0F,
+//                      output_pitch, output_roll, output_yaw);
+
+
+//    output_motor[0] += 200;
+//    output_motor[1] += 200;
+//    output_motor[2] += 200;
+//    output_motor[3] += 200;
+//    if (output_motor[0] >= 400) output_motor[0] = 400;
+//    if (output_motor[1] >= 400) output_motor[1] = 400;
+//    if (output_motor[2] >= 400) output_motor[2] = 400;
+//    if (output_motor[3] >= 400) output_motor[3] = 400;
+
+//    printf("motor[0]: %d motor[1]: %d motor[2]: %d motor[3]: %d\r\n", output_motor[0],
+//            output_motor[1], output_motor[2], output_motor[3]);
+
+    //======TEST======END
 
     if (comm_link_fly_enable_flag)
     {
@@ -451,66 +493,58 @@ void Control_SetMotorPWM(void)
     }
 }
 
-//// Estimate thrust's min value according to battery's voltage.
-//float Control_EstimateThrustRefMin(void)
-//{
-//    float min_thrust_ref = -0.55f;
+// Estimate thrust's min value according to battery's voltage.
+float Control_EstimateThrustRefMin(void)
+{
+    float min_thrust_ref = -0.55F;
 
-//    // Check battery voltage.
-//    Battery_InformationStructure.voltage_ad        = Battery_GetAD();
-//    Battery_InformationStructure.voltage_calculate =
-//        Battery_InformationStructure.voltage_factor *
-//       (Battery_InformationStructure.voltage_ad / 4096.0) *
-//        Battery_InformationStructure.voltage_ad_ref;
+    // Check battery voltage.
+    Battery_InformationStructure.voltage_calculate = comm_link_rc_bat;
 
-//    if (Battery_InformationStructure.voltage_calculate > 4.05)
-//    {
-//        min_thrust_ref = -0.30f;
-//    }
-//    else if (Battery_InformationStructure.voltage_calculate > 3.90)
-//    {
-//        min_thrust_ref = -0.40f;
-//    }
-//    else
-//    {
-//        min_thrust_ref = -0.55f;
-//    }
+    if (Battery_InformationStructure.voltage_calculate > 4.05F)
+    {
+        min_thrust_ref = -0.30F;
+    }
+    else if (Battery_InformationStructure.voltage_calculate > 3.90F)
+    {
+        min_thrust_ref = -0.40F;
+    }
+    else
+    {
+        min_thrust_ref = -0.55F;
+    }
 
-//    return min_thrust_ref;
-//}
+    return min_thrust_ref;
+}
 
-//// Estimate thrust's value for hover according to battery's voltage.
-//float Control_EstimateThrustRefHover(void)
-//{
-//    float hover_thrust_ref = -0.55f;
+// Estimate thrust's value for hover according to battery's voltage.
+float Control_EstimateThrustRefHover(void)
+{
+    float hover_thrust_ref = -0.55F;
 
-//    // Check battery voltage.
-//    Battery_InformationStructure.voltage_ad        = Battery_GetAD();
-//    Battery_InformationStructure.voltage_calculate =
-//        Battery_InformationStructure.voltage_factor *
-//       (Battery_InformationStructure.voltage_ad / 4096.0) *
-//        Battery_InformationStructure.voltage_ad_ref;
+    // Check battery voltage.
+    Battery_InformationStructure.voltage_calculate = comm_link_rc_bat;
 
-//    if (Battery_InformationStructure.voltage_calculate > 4.05)
-//    {
-//        hover_thrust_ref = -0.25f;
-//    }
-//    else if (Battery_InformationStructure.voltage_calculate > 3.90)
-//    {
-//        hover_thrust_ref = -0.40f;
-//    }
-//    else if (Battery_InformationStructure.voltage_calculate > 3.80)
-//    {
-//        hover_thrust_ref = -0.45f;
-//    }
-//    else if (Battery_InformationStructure.voltage_calculate > 3.70)
-//    {
-//        hover_thrust_ref = -0.50f;
-//    }
-//    else
-//    {
-//        hover_thrust_ref = -0.55f;
-//    }
+    if (Battery_InformationStructure.voltage_calculate > 4.05F)
+    {
+        hover_thrust_ref = -0.25F;
+    }
+    else if (Battery_InformationStructure.voltage_calculate > 3.90F)
+    {
+        hover_thrust_ref = -0.40F;
+    }
+    else if (Battery_InformationStructure.voltage_calculate > 3.80F)
+    {
+        hover_thrust_ref = -0.45F;
+    }
+    else if (Battery_InformationStructure.voltage_calculate > 3.70F)
+    {
+        hover_thrust_ref = -0.50F;
+    }
+    else
+    {
+        hover_thrust_ref = -0.55F;
+    }
 
-//    return hover_thrust_ref;
-//}
+    return hover_thrust_ref;
+}
