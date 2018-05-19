@@ -373,7 +373,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER, STM32F10X_MD</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Libraries\CMSIS;..\Libraries\FWLib\inc;..\User;..\Drivers\Driver_IO;..\Drivers\Driver_IIC;..\Drivers\Driver_Timer;..\Drivers\Driver_NVIC;..\Drivers\Driver_Clock;..\Drivers\Driver_Flash;..\Drivers\Driver_Delay;..\Drivers\Driver_USART;..\Drivers\Driver_EEPROM;..\Modules\Module_LED;..\Modules\Module_Motor;..\Modules\Module_MS5611;..\Modules\Module_MPU6050;..\Modules\Module_CommLink;..\Algorithm\Algorithm_IMU;..\Algorithm\Algorithm_Filter;..\Algorithm\Algorithm_Flight;..\Algorithm\Algorithm_Control;..\Algorithm\Algorithm_Altitude</IncludePath>
+              <IncludePath>..\Libraries\CMSIS;..\Libraries\FWLib\inc;..\User;..\Drivers\Driver_IO;..\Drivers\Driver_IIC;..\Drivers\Driver_Timer;..\Drivers\Driver_NVIC;..\Drivers\Driver_Clock;..\Drivers\Driver_Flash;..\Drivers\Driver_Delay;..\Drivers\Driver_USART;..\Drivers\Driver_EEPROM;..\Modules\Module_LED;..\Modules\Module_Motor;..\Modules\Module_Battery;..\Modules\Module_MS5611;..\Modules\Module_MPU6050;..\Modules\Module_CommLink;..\Modules\Module_HMC5883L;..\Algorithm\Algorithm_IMU;..\Algorithm\Algorithm_Filter;..\Algorithm\Algorithm_Flight;..\Algorithm\Algorithm_Control;..\Algorithm\Algorithm_Altitude</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -637,6 +637,11 @@
               <FilePath>..\Modules\Module_Motor\stm32f10x_module_motor.c</FilePath>
             </File>
             <File>
+              <FileName>stm32f10x_module_battery.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Modules\Module_Battery\stm32f10x_module_battery.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32f10x_module_ms5611.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Modules\Module_MS5611\stm32f10x_module_ms5611.c</FilePath>
@@ -645,6 +650,11 @@
               <FileName>stm32f10x_module_mpu6050.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Modules\Module_MPU6050\stm32f10x_module_mpu6050.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_module_hmc5883l.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Modules\Module_HMC5883L\stm32f10x_module_hmc5883l.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_module_comm_link.c</FileName>
