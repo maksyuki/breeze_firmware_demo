@@ -40,29 +40,29 @@ maksyuki    2018.05.10    Modify the module
 
 // Addresses of the device CSB = 0.
 // Default IIC address.
-#define MS5611_ADDR                     0XEE
+#define MS5611_ADDR                     0xEE
 // Registers of the device.
-#define MS5611_D1                       0X40
-#define MS5611_D2                       0X50
-#define MS5611_RESET                    0X1E
+#define MS5611_D1                       0x40
+#define MS5611_D2                       0x50
+#define MS5611_RESET                    0x1E
 // D1 and D2 result size(bytes).
 #define MS5611_D1D2_SIZE                3
 
 // OSR(Over Sampling Ratio)constants.
 // Conversion time 0.6ms resolution 0.065mbar.
-#define MS5611_OSR_256                  0X00
+#define MS5611_OSR_256                  0x00
 // Conversion time 1.2ms resolution 0.042mbar.
-#define MS5611_OSR_512                  0X02
+#define MS5611_OSR_512                  0x02
 // Conversion time 2.3ms resolution 0.027mbar.
-#define MS5611_OSR_1024                 0X04
+#define MS5611_OSR_1024                 0x04
 // Conversion time 4.6ms resolution 0.018mbar.
-#define MS5611_OSR_2048                 0X06
+#define MS5611_OSR_2048                 0x06
 // Conversion time 9.1ms resolution 0.012mbar.
-#define MS5611_OSR_4096                 0X08
+#define MS5611_OSR_4096                 0x08
 
 // By adding ints from 0 to 6 we can read all the PROM configuration values.
 // C1 will be at 0xA2 and all the subsequent are multiples of 2.
-#define MS5611_PROM_BASE_ADDR           0XA2
+#define MS5611_PROM_BASE_ADDR           0xA2
 // Number of registers in the PROM.
 #define MS5611_PROM_REG_COUNT           6
 // Size in bytes of a PROM registry.
@@ -80,10 +80,10 @@ maksyuki    2018.05.10    Modify the module
 
 // MS5611 state machine.
 // [TEMP: Temperature] [PRES: Pressure].
-#define MS5611_STATE_START_CONVERT_TEMP 0X01
-#define MS5611_STATE_CONVERTING_TEMP    0X02
-#define MS5611_STATE_START_CONVERT_PRES 0X03
-#define MS5611_STATE_CONVERTING_PRES    0X04
+#define MS5611_STATE_START_CONVERT_TEMP 0x01
+#define MS5611_STATE_CONVERTING_TEMP    0x02
+#define MS5611_STATE_START_CONVERT_PRES 0x03
+#define MS5611_STATE_CONVERTING_PRES    0x04
 
 #define MS5611_PRES_OFFSET_INIT_NUM     50
 

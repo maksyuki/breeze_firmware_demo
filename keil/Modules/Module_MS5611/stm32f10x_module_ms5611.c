@@ -36,8 +36,8 @@ maksyuki    2018.05.10    Modify the module
 #include <stdio.h>
 #include "config.h"
 #include "stm32f10x_it.h"
-#include "stm32f10x_driver_delay.h"
 #include "stm32f10x_driver_iic.h"
+#include "stm32f10x_driver_delay.h"
 #include "stm32f10x_driver_usart.h"
 #include "stm32f10x_module_ms5611.h"
 
@@ -85,7 +85,6 @@ static u8 index_pressure    = 0;
 void MS5611_AddNewAltitude(float value)
 {
     s16 i;
-
     for (i = 1; i < MS5611_BUFFER_SIZE; i++)
     {
         altitude_buffer[i-1] = altitude_buffer[i];
@@ -122,32 +121,38 @@ void MS5611_GetPressure(void)
     pressure_raw = MS5611_GetConversion();
     delta        = temperature_value - (((s32)calibration_params[4]) << 8);
 
-    actual_offset      = (((s64)calibration_params[1]) << 16)
-        + ((((s64)calibration_params[3]) * delta) >> 7);
-    actual_sensitivity = (((s64)calibration_params[0]) << 15)
-        + (((s64)(calibration_params[2]) * delta) >> 8);
     actual_temperature = 2000 + (delta * (s64)calibration_params[5]) / 8388608;
+    actual_offset      = (((s64)calibration_params[1]) << 16)
+                       + (((s64)(calibration_params[3]) * delta) >> 7);
+    actual_sensitivity = (((s64)calibration_params[0]) << 15)
+                       + (((s64)(calibration_params[2]) * delta) >> 8);
 
     // Compensate temperature secondly.
     if (actual_temperature < 2000)
 	{
-        temp               = (actual_temperature - 2000)
-            * (actual_temperature - 2000);
+        temp_temperature   = (((s64)delta) * delta) >> 31;
+        temp               = (actual_temperature - 2000) *
+                             (actual_temperature - 2000);
         temp_offset        = (5 * temp) >> 1;
         temp_sensitivity   = (5 * temp) >> 2;
-        temp_temperature   = (((s64)delta) * delta) >> 31;
         actual_temperature = actual_temperature - temp_temperature;
         actual_offset      = actual_offset - temp_offset;
         actual_sensitivity = actual_sensitivity - temp_sensitivity;
     }
 
+    ms5611_pressure = (((((s64)pressure_raw) * actual_sensitivity) >> 21)
+                       - actual_offset) / 32768;
+//    MS5611_AddNewPressure((((((s64)pressure_raw) * actual_sensitivity) >> 21)
+//                         - actual_offset) / 32768);
+//    ms5611_pressure = MS5611_GetAverage(pressure_buffer, MS5611_BUFFER_SIZE);
+
     MS5611_AddNewTemperature(actual_temperature * 0.01F);
+    ms5611_temperature = MS5611_GetAverage(temperature_buffer, MS5611_BUFFER_SIZE);
 
     ms5611_altitude = MS5611_GetAltitude();
-    ms5611_pressure = (((((s64)pressure_raw) * actual_sensitivity) >> 21)
-        - actual_offset) / 32768;
-    ms5611_temperature = MS5611_GetAverage(temperature_buffer,
-                                           MS5611_BUFFER_SIZE);
+
+    MS5611_AddNewAltitude(ms5611_altitude);
+    ms5611_altitude = MS5611_GetAverage(altitude_buffer, MS5611_BUFFER_SIZE);
 }
 
 void MS5611_GetTemperature(void)
@@ -327,8 +332,8 @@ u32 MS5611_GetConversion(void)
 // Convert current pressure to height.
 float MS5611_GetAltitude(void)
 {
-    float temp;
-    float altitude;
+    float tmp;
+    static float altitude;
 
     // Judge whether 0m pressure have been initialized or not.
     if (pressure_offset == 0)
@@ -349,21 +354,21 @@ float MS5611_GetAltitude(void)
         return altitude;
     }
 
-    temp     = 1 - pow((ms5611_pressure / pressure_offset), 0.1903);
-    altitude = 4433000.0 * temp * 0.01F;
+    tmp     = 1 - pow((ms5611_pressure / pressure_offset), 0.1903);
+    altitude = 4433000.0 * tmp * 0.01F;
     altitude = altitude + altitude_offset ;
 
 //    printf("ms5611_pressure: %.6f\r\n", ms5611_pressure);
 //    printf("pressure_offset: %.6f\r\n", pressure_offset);
 //    printf("altitude_offset: %.6f\r\n", altitude_offset);
-    
+
     return altitude;
 }
 
 float MS5611_GetAverage(float *buffer, u8 size)
 {
     u8 i;
-    float sum = 0.0;
+    float sum = 0.0F;
 
     for (i = 0; i < size; i++)
     {
