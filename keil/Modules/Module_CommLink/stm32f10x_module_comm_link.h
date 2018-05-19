@@ -149,34 +149,19 @@ typedef struct
 
 extern u8    comm_link_mcu_state;
 extern u16   comm_link_rc_data[4];
+extern u16   comm_link_rc_data_pre[4];
 extern float comm_link_rc_bat;
 extern u32   comm_link_last_rc_timestamp;
 extern bool  comm_link_fly_enable_flag;
 extern bool  comm_link_pc_cmd_flag;
 
 extern CommLink_Data        CommLink_DataStructure;
-extern CommLink_DataPacketA CommLink_DataPacketAStructure;
-extern CommLink_DataPacketB CommLink_DataPacketBStructure;
 
-extern void  CommLink_AddBits8ToBuffer(u8 byte);
-extern void  CommLink_AddBits16ToBuffer(s16 bytes);
-extern void  CommLink_AddDataToBuffer(u8 *data, u8 length);
-extern void  CommLink_ConvertEndian(u8 *data, u8 length);
-extern void  CommLink_HandleCommand(void);
-extern void  CommLink_HandleDebugDataA(void);
-extern void  CommLink_HandleDebugDataB(void);
-extern void  CommLink_HandleDebugDataC(void);
 extern void  CommLink_ProcessDataFromUART(void);
 static u8    TransUARTStringToChar(void);
 static s16   TransUARTStringToNumber(void);
 static float TransUARTStringToFloat(void);
 extern void  CommLink_ReceiveDataFromUART(void);
-extern void  CommLink_ReadPacket(u8 byte);
-extern void  CommLink_Test(void);
-extern void  CommLink_WriteBuffer(void);
-extern void  CommLink_WriteDebugData(void);
-extern void  CommLink_WritePacket(u8 command);
-extern void  CommLink_WritePID(u8 pid_type);
 extern float CommLink_CutDBScaleToLinear(float x_start, float x_end,
                                          float deadband);
 
