@@ -26,8 +26,8 @@ maksyuki    2018.05.10    Modify the module
 *******************************************************************************/
 
 #include "stm32f10x_driver_delay.h"
-// #include "stm32f10x_module_battery.h"
 #include "stm32f10x_module_led.h"
+#include "stm32f10x_module_battery.h"
 #include "stm32f10x_algorithm_imu.h"
 #include "stm32f10x_algorithm_flight.h"
 #include "stm32f10x_algorithm_control.h"
@@ -73,19 +73,19 @@ void LED_JumpStateMachine(void)
         // Fail to calibrate the IMU.
         LED_StateMachineStructure.state = LED_STATE_CALI_FAIL;
     }
-//    if (Battery_InformationStructure.flag_alarm)
-//    {
-//        LED_StateMachineStructure.state = LED_STATE_BAT_LOW;
-//    }
+    if (Battery_InformationStructure.flag_alarm)
+    {
+        LED_StateMachineStructure.state = LED_STATE_BAT_LOW;
+    }
     if (imu_cali_flag)
     {
        // Finish the calibrate of IMU.
         LED_StateMachineStructure.state = LED_STATE_CALI;
     }
-//    if (Battery_InformationStructure.flag_charge)
-//    {
-//        LED_StateMachineStructure.state = LED_STATE_BAT_CHG;
-//    }
+    if (Battery_InformationStructure.flag_charge)
+    {
+        LED_StateMachineStructure.state = LED_STATE_BAT_CHG;
+    }
     if (control_altitude_mode == CONTROL_STATE_LANDING)
     {
         LED_StateMachineStructure.state = LED_STATE_LANDING;
