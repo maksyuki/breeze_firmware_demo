@@ -18,7 +18,7 @@ Function List:
                                                            float corr_factor,
                                                            u8 i);
              3. void Altitude_PredictByUsingInertialFilter(float delta_time,
-                                              float data[3]);
+                                                           float data[3]);
 History:
 <author>    <date>        <desc>
 myyerrol    2017.04.30    Modify the module
@@ -35,18 +35,18 @@ Altitude_NEDFrame Altitude_NEDFrameStructure;
 
 // Estimate: pos_z, vel_z, acc_z.
 static float z_estimate[3];
-static float weight_z_bar    = 0.5f;
-static float weight_z_acc    = 20.0f;
-static float weight_acc_bias = 0.05f;
+static float weight_z_bar    = 0.5F;
+static float weight_z_acc    = 20.0F;
+static float weight_acc_bias = 0.05F;
 // Acceleration's data in NED frame.
-static float ned_acc_data[3] = {0.0f, 0.0f, -IMU_CONSTANTS_ONE_G};
+static float ned_acc_data[3] = {0.0F, 0.0F, -IMU_CONSTANTS_ONE_G};
 // Barometer's correctional factor.
 // Unit: m.
-static float bar_corr_factor = 0.0f;
+static float bar_corr_factor = 0.0F;
 // Acceleration's correctional data in NED frame.
-static float ned_acc_corr[3] = {0.0f, 0.0f, 0.0f};
+static float ned_acc_corr[3] = {0.0F, 0.0F, 0.0F};
 // Acceleration's bias in Body frame.
-static float body_acc_bias[3] = {0.0f, 0.0f, 0.0f};
+static float body_acc_bias[3] = {0.0F, 0.0F, 0.0F};
 
 void Altitude_CombineData(void)
 {
@@ -54,11 +54,11 @@ void Altitude_CombineData(void)
     static u32 timestamp_pre = 0;
            u32 timestamp_now = 0;
     float delta_time;
-    float acc_bias_corr[3]   = {0.0f, 0.0f, 0.0f};
+    float acc_bias_corr[3]   = {0.0F, 0.0F, 0.0F};
 
     timestamp_now = Delay_GetRuntimeUs();
     delta_time    = (timestamp_pre > 0) ?
-        ((timestamp_now - timestamp_pre) / 1000000.0f) : 0;
+        ((timestamp_now - timestamp_pre) / 1000000.0F) : 0;
     timestamp_pre = timestamp_now;
 
     if (!ms5611_pressure_offset_flag)
@@ -86,7 +86,7 @@ void Altitude_CombineData(void)
 
         for (i = 0; i < 3; i++)
         {
-            ned_acc_data[i] = 0.0f;
+            ned_acc_data[i] = 0.0F;
             for (j = 0; j < 3; j++)
             {
                 ned_acc_data[i] += IMU_TableStructure.dcm_gb[j][i] *
@@ -105,7 +105,7 @@ void Altitude_CombineData(void)
     // Transform bias vector from NED frame to Body frame.
     for (i = 0; i < 3; i++)
     {
-        float temp = 0.0f;
+        float temp = 0.0F;
         for (j = 0; j < 3; j++)
         {
             temp += IMU_TableStructure.dcm_gb[i][j] * acc_bias_corr[j];
@@ -146,6 +146,6 @@ void Altitude_CorrectByUsingInertialFilter(float delta_time, float data[3],
 
 void Altitude_PredictByUsingInertialFilter(float delta_time, float data[3])
 {
-    data[0] = data[1] * delta_time + data[2] * delta_time * delta_time / 2.0f;
+    data[0] = data[1] * delta_time + data[2] * delta_time * delta_time / 2.0F;
     data[1] = data[2] * delta_time;
 }
