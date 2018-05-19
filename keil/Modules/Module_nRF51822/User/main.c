@@ -130,6 +130,9 @@ void assert_nrf_callback(uint16_t line_num, const uint8_t * p_file_name)
  * @details This function will set up all the necessary GAP (Generic Access Profile) parameters of
  *          the device. It also sets the permissions and appearance.
  */
+
+#define TX_POWER_LEVEL 4
+
 static void gap_params_init(void)
 {
     uint32_t                err_code;
@@ -152,10 +155,16 @@ static void gap_params_init(void)
 
     err_code = sd_ble_gap_ppcp_set(&gap_conn_params);
     APP_ERROR_CHECK(err_code);
+
+    err_code = sd_ble_gap_tx_power_set(TX_POWER_LEVEL);
+    APP_ERROR_CHECK(err_code);
 }
 
 //user code==========================================
 //===================================================
+float volt;
+bool  volt_read_complete = false;
+
 static void nrf_delay_ms(uint32_t volatile number_of_ms)
 {
     int i;
@@ -288,7 +297,7 @@ static void battery_poweroff(void)
 //    nrf_gpio_pin_clear(18);
 }
 
-static void battery_timer_handler(void * p_context)
+static void battery_timer_handler(void* p_context)
 {
     UNUSED_PARAMETER(p_context);
     Battery_updateChargeState();
@@ -321,7 +330,7 @@ static void timer1_init(void)
 
 
 #define ADC_BUFFER_SIZE 1
-#define ADC_SAMPLE_RATE 1000 // 1000ms
+#define ADC_SAMPLE_RATE 5000 // 5000ms
 
 static nrf_adc_value_t adc_buffer[ADC_BUFFER_SIZE];
 
@@ -372,7 +381,9 @@ static void adc_event_handler(nrf_drv_adc_evt_t const* p_event)
     {
         for (uint32_t i = 0; i < p_event->data.done.size; i++)
         {
-            printf("V:%d\r\n", p_event->data.done.p_buffer[i]);
+            volt = p_event->data.done.p_buffer[i] * 3.6F * 3 / 1024.0F;
+//            printf("V:%.8f", volt);
+            volt_read_complete = true;
         }
         APP_ERROR_CHECK(nrf_drv_adc_buffer_convert(adc_buffer, ADC_BUFFER_SIZE));
     }
@@ -390,7 +401,19 @@ static void adc_config(void)
 //user code==========================================
 //===================================================
 
+static void SendFloatValueToUART(float val)
+{
+    uint8_t tmp_int, tmp_dec;
+    tmp_int = (uint8_t) val;
+    while (app_uart_put('&') != NRF_SUCCESS);
+    while (app_uart_put(tmp_int + '0') != NRF_SUCCESS);
+    while (app_uart_put('.') != NRF_SUCCESS);
 
+    tmp_dec = (uint8_t) ((val - tmp_int) * 100);
+
+    while (app_uart_put(tmp_dec / 10 + '0') != NRF_SUCCESS);
+    while (app_uart_put(tmp_dec % 10 + '0') != NRF_SUCCESS);
+}
 
 /**@brief Function for handling the data from the Nordic UART Service.
  *
@@ -407,10 +430,16 @@ static void nus_data_handler(ble_nus_t * p_nus, uint8_t * p_data, uint16_t lengt
     for (uint32_t i = 0; i < length; i++)
     {
         if (p_data[i] == 'M') battery_poweroff(); //for debugging!!!!!!
+        if (volt_read_complete)
+        {
+            SendFloatValueToUART(volt);
+            volt_read_complete = false;
+        }
+
         while (app_uart_put(p_data[i]) != NRF_SUCCESS);
     }
-    while (app_uart_put('\r') != NRF_SUCCESS);
-    while (app_uart_put('\n') != NRF_SUCCESS);
+//    while (app_uart_put('\r') != NRF_SUCCESS);
+//    while (app_uart_put('\n') != NRF_SUCCESS);
 }
 /**@snippet [Handling the data received over BLE] */
 
@@ -968,51 +997,52 @@ int main(void)
     uart_init();
 
     //buttons_leds_init(&erase_bonds);
-    
+
     leds_init();
+//    //test
+//    while (1)
+//    {
+//        nrf_gpio_pin_set(17);
+//        nrf_delay_ms(1500);
+//        nrf_gpio_pin_clear(17);
+//        nrf_delay_ms(1500);
+//        nrf_gpio_pin_set(18);
+//        nrf_delay_ms(1500);
+//        nrf_gpio_pin_clear(18);
+//        nrf_delay_ms(1500);
+//    }
+//
     timers_init();
     battery_managment_init();
     battery_setChargeMode(chargeMax);
-    
+
     ble_stack_init();
     gap_params_init();
     services_init();
     advertising_init();
     conn_params_init();
 
-    printf("\r\nUART Start!\r\n");
+    //printf("\r\nUART Start!\r\n");
     err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
     APP_ERROR_CHECK(err_code);
-    
+
     nrf_gpio_pin_set(17);
     // Enter main loop.
 
-//    timer2_init();    // ³õÊ¼»¯timer2
-//    adc_ppi_config(); // ÅäÖÃPPI
-//    adc_config();	  // ÅäÖÃADC
-//    APP_ERROR_CHECK(nrf_drv_adc_buffer_convert(adc_buffer, ADC_BUFFER_SIZE));
-    
-//    timer1_init();
-    
-//    while(1)
-//    {
-//        battery_poweroff();
-//    }
-    
+    timer2_init();    // ³õÊ¼»¯timer2
+    adc_ppi_config(); // ÅäÖÃPPI
+    adc_config();	  // ÅäÖÃADC
+    APP_ERROR_CHECK(nrf_drv_adc_buffer_convert(adc_buffer, ADC_BUFFER_SIZE));
+
+    timer1_init();
 //    while (Battery_updateChargeState() != charged) ;
-    
-//    while(cnt <= 16)
-//    {
-//        nrf_delay_ms(1000);
-//        nrf_gpio_pin_toggle(18);
-//        cnt++;
-//    }
-    
+
     while (1)
     {
         battery_poweroff();
+        Battery_updateChargeState();
     }
-    
+
     for (;;)
     {
         //power_manage();
