@@ -71,33 +71,81 @@ void EEPROM_SaveParamsToEEPROM(void)
     EEPROM_WriteTableToEEPROM();
 }
 
+//void EEPROM_SetDefaultParams(void)
+//{
+//    Control_PIDPitchAngle.kp        = 3.5;
+//    Control_PIDPitchAngle.ki        = 0;
+//    Control_PIDPitchAngle.kd        = 0;
+//    Control_PIDPitchAngle.limit_int = 300;
+
+//    Control_PIDPitchAngleRate.kp        = 0.7;
+//    Control_PIDPitchAngleRate.ki        = 0.5;
+//    Control_PIDPitchAngleRate.kd        = 0.03;
+//    Control_PIDPitchAngleRate.limit_int = 300;
+
+//    Control_PIDRollAngle.kp        = 3.5;
+//    Control_PIDRollAngle.ki        = 0;
+//    Control_PIDRollAngle.kd        = 0;
+//    Control_PIDRollAngle.limit_int = 300;
+
+//    Control_PIDRollAngleRate.kp        = 0.7;
+//    Control_PIDRollAngleRate.ki        = 0.5;
+//    Control_PIDRollAngleRate.kd        = 0.03;
+//    Control_PIDRollAngleRate.limit_int = 300;
+
+//    Control_PIDYawAngle.kp = 1;
+//    Control_PIDYawAngle.ki = 0.2;
+//    Control_PIDYawAngle.kd = 0;
+
+//    Control_PIDYawAngleRate.kp = 20;
+//    Control_PIDYawAngleRate.ki = 0;
+//    Control_PIDYawAngleRate.kd = 0;
+
+//    Control_PIDAlt.kp = 1.0;
+//    Control_PIDAlt.ki = 0;
+//    Control_PIDAlt.kd = 0;
+
+//    Control_PIDAltVel.kp = 0.1f;
+//    Control_PIDAltVel.ki = 0.02f;
+//    Control_PIDAltVel.kd = 0;
+
+//    IMU_TableStructure.acc_off[0] = -0.1620515;
+//    IMU_TableStructure.acc_off[1] = 0.07422026;
+//    IMU_TableStructure.acc_off[2] = 0.7743073;
+
+//    IMU_TableStructure.gyr_off[0] = -0.06097556;
+//    IMU_TableStructure.gyr_off[1] = -0.03780485;
+//    IMU_TableStructure.gyr_off[2] = 0;
+//}
+
+//======TEST======
 void EEPROM_SetDefaultParams(void)
 {
-    Control_PIDPitchAngle.kp        = 3.5;
+    Control_PIDPitchAngle.kp        = 20; //orgial 20
     Control_PIDPitchAngle.ki        = 0;
     Control_PIDPitchAngle.kd        = 0;
     Control_PIDPitchAngle.limit_int = 300;
 
-    Control_PIDPitchAngleRate.kp        = 0.7;
-    Control_PIDPitchAngleRate.ki        = 0.5;
-    Control_PIDPitchAngleRate.kd        = 0.03;
+    Control_PIDPitchAngleRate.kp        = 0.24; // orgial 0.48
+    Control_PIDPitchAngleRate.ki        = 0;
+    Control_PIDPitchAngleRate.kd        = 0.04;
     Control_PIDPitchAngleRate.limit_int = 300;
 
-    Control_PIDRollAngle.kp        = 3.5;
+    Control_PIDRollAngle.kp        = 20; //orgial 20
     Control_PIDRollAngle.ki        = 0;
     Control_PIDRollAngle.kd        = 0;
     Control_PIDRollAngle.limit_int = 300;
 
-    Control_PIDRollAngleRate.kp        = 0.7;
-    Control_PIDRollAngleRate.ki        = 0.5;
-    Control_PIDRollAngleRate.kd        = 0.03;
+    Control_PIDRollAngleRate.kp        = 0.24; // orgial 0.48
+    Control_PIDRollAngleRate.ki        = 0;
+    Control_PIDRollAngleRate.kd        = 0.04;
     Control_PIDRollAngleRate.limit_int = 300;
 
-    Control_PIDYawAngle.kp = 1;
-    Control_PIDYawAngle.ki = 0.2;
+    Control_PIDYawAngle.kp = 10;
+    Control_PIDYawAngle.ki = 0;
     Control_PIDYawAngle.kd = 0;
 
-    Control_PIDYawAngleRate.kp = 20;
+    Control_PIDYawAngleRate.kp = 10;
     Control_PIDYawAngleRate.ki = 0;
     Control_PIDYawAngleRate.kd = 0;
 
@@ -105,8 +153,8 @@ void EEPROM_SetDefaultParams(void)
     Control_PIDAlt.ki = 0;
     Control_PIDAlt.kd = 0;
 
-    Control_PIDAltVel.kp = 0.1f;
-    Control_PIDAltVel.ki = 0.02f;
+    Control_PIDAltVel.kp = 0.1F;
+    Control_PIDAltVel.ki = 0.02F;
     Control_PIDAltVel.kd = 0;
 
     IMU_TableStructure.acc_off[0] = -0.1620515;
@@ -117,6 +165,7 @@ void EEPROM_SetDefaultParams(void)
     IMU_TableStructure.gyr_off[1] = -0.03780485;
     IMU_TableStructure.gyr_off[2] = 0;
 }
+//======TEST======
 
 void EEPROM_TransParamsToTable(void)
 {
