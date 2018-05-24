@@ -243,6 +243,8 @@ static void battery_setChargeMode(BatteryChargeMode chgMode)
     }
 }
 
+//static bool chg_state_is_sended = false;
+
 static BatteryChargeStates Battery_updateChargeState(void)
 {
     uint32_t next_delay = 0;
@@ -270,6 +272,11 @@ static BatteryChargeStates Battery_updateChargeState(void)
     else if (isPgood && isCharging) //正在充电
     {
         m_battery_chargestate = charging;
+//        if (!chg_state_is_sended)
+//        {
+//            while (app_uart_put('\'') != NRF_SUCCESS);
+//            chg_state_is_sended = true;
+//        }
         nrf_gpio_pin_set(18); 
     }
     else if (!isPgood && !isCharging) //没插USB充电线
@@ -382,7 +389,7 @@ static void adc_event_handler(nrf_drv_adc_evt_t const* p_event)
         for (uint32_t i = 0; i < p_event->data.done.size; i++)
         {
             volt = p_event->data.done.p_buffer[i] * 3.6F * 3 / 1024.0F;
-//            printf("V:%.8f", volt);
+            //printf("V:%.2f", volt);
             volt_read_complete = true;
         }
         APP_ERROR_CHECK(nrf_drv_adc_buffer_convert(adc_buffer, ADC_BUFFER_SIZE));
